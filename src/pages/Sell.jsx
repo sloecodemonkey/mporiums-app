@@ -431,83 +431,7 @@ function Sell() {
                   <p className="text-muted text-xs">{sellCategory}</p>
                 )}
               </div>
-            )}
-
-            {/* ── SELLER TYPE — RADIO CHECKBOXES ──
-                Two styled radio options. Checking one updates sellerType
-                state which instantly recalculates the fee breakdown below.
-                Using radio inputs (not pill buttons) so only one can be
-                selected at a time and keyboard navigation works correctly. */}
-            <div className="form-group">
-              <label className="label-with-icon" style={{ marginBottom: "0.6rem" }}>
-                <img src="/icons/user.svg" alt="Seller Type" style={{ width: "1.25rem", height: "1.25rem" }} />
-                Seller Type
-              </label>
-
-              {/* Standard Seller option */}
-              <label
-                htmlFor="seller-standard"
-                style={{
-                  display: "flex", alignItems: "flex-start", gap: "0.75rem",
-                  padding: "0.75rem 1rem",
-                  border: `1.5px solid ${sellerType === "standard" ? "var(--primary)" : "var(--border)"}`,
-                  borderRadius: "var(--radius)",
-                  cursor: "pointer", marginBottom: "0.5rem",
-                  background: sellerType === "standard" ? "var(--muted)" : "var(--card)",
-                  transition: "border-color 0.15s, background 0.15s",
-                }}
-              >
-                <input
-                  type="radio"
-                  id="seller-standard"
-                  name="sellerType"
-                  value="standard"
-                  checked={sellerType === "standard"}
-                  onChange={() => setSellerType("standard")}
-                  style={{ marginTop: "0.2rem", accentColor: "var(--primary)", flexShrink: 0 }}
-                />
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: "0.875rem", marginBottom: "0.15rem" }}>
-                    Standard Seller
-                  </p>
-                  <p className="text-muted text-xs">
-                    3.19% + $0.49 per transaction &nbsp;·&nbsp; max $500
-                  </p>
-                </div>
-              </label>
-
-              {/* Preferred Seller option */}
-              <label
-                htmlFor="seller-preferred"
-                style={{
-                  display: "flex", alignItems: "flex-start", gap: "0.75rem",
-                  padding: "0.75rem 1rem",
-                  border: `1.5px solid ${sellerType === "preferred" ? "var(--primary)" : "var(--border)"}`,
-                  borderRadius: "var(--radius)",
-                  cursor: "pointer",
-                  background: sellerType === "preferred" ? "var(--muted)" : "var(--card)",
-                  transition: "border-color 0.15s, background 0.15s",
-                }}
-              >
-                <input
-                  type="radio"
-                  id="seller-preferred"
-                  name="sellerType"
-                  value="preferred"
-                  checked={sellerType === "preferred"}
-                  onChange={() => setSellerType("preferred")}
-                  style={{ marginTop: "0.2rem", accentColor: "var(--primary)", flexShrink: 0 }}
-                />
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: "0.875rem", marginBottom: "0.15rem" }}>
-                    Mporiums Preferred Seller
-                  </p>
-                  <p className="text-muted text-xs">
-                    2.99% + $0.49 per transaction &nbsp;·&nbsp; max $500
-                  </p>
-                </div>
-              </label>
-            </div>
+            )} 
 
             {/* ── FEE BREAKDOWN CARD ──
                 Always visible once a seller type is shown — shows the
@@ -519,56 +443,101 @@ function Sell() {
                 Selling Fees
               </h3>
 
-              {/* Fee rate table — always visible */}
+              {/* Fee rate table with radio buttons inline in each row */}
               <div style={{
-                display: "grid", gridTemplateColumns: "1fr 1fr",
-                gap: "0", marginBottom: "0.75rem",
-                border: "0.5px solid var(--border)", borderRadius: "calc(var(--radius) - 4px)",
+                border: "0.5px solid var(--border)",
+                borderRadius: "calc(var(--radius) - 4px)",
                 overflow: "hidden", fontSize: "0.78rem",
+                marginBottom: "0.75rem",
               }}>
                 {/* Header row */}
-                <div style={{ padding: "0.4rem 0.75rem", background: "var(--muted)", fontWeight: 600, color: "var(--muted-foreground)", borderBottom: "0.5px solid var(--border)" }}>
-                  Seller type
-                </div>
-                <div style={{ padding: "0.4rem 0.75rem", background: "var(--muted)", fontWeight: 600, color: "var(--muted-foreground)", borderBottom: "0.5px solid var(--border)", borderLeft: "0.5px solid var(--border)" }}>
-                  Fee
-                </div>
-                {/* Standard row */}
                 <div style={{
-                  padding: "0.5rem 0.75rem",
-                  background: sellerType === "standard" ? "var(--muted)" : "transparent",
-                  fontWeight: sellerType === "standard" ? 600 : 400,
-                  color: sellerType === "standard" ? "var(--primary)" : "var(--foreground)",
+                  display: "grid", gridTemplateColumns: "1fr 1fr",
+                  background: "var(--muted)",
                   borderBottom: "0.5px solid var(--border)",
                 }}>
-                  Standard
+                  <div style={{ padding: "0.4rem 0.75rem", fontWeight: 600, color: "var(--muted-foreground)" }}>
+                    Seller type
+                  </div>
+                  <div style={{ padding: "0.4rem 0.75rem", fontWeight: 600, color: "var(--muted-foreground)", borderLeft: "0.5px solid var(--border)" }}>
+                    Fee
+                  </div>
                 </div>
-                <div style={{
-                  padding: "0.5rem 0.75rem",
-                  background: sellerType === "standard" ? "var(--muted)" : "transparent",
-                  color: "var(--muted-foreground)",
-                  borderLeft: "0.5px solid var(--border)",
-                  borderBottom: "0.5px solid var(--border)",
-                }}>
-                  3.19% + $0.49
-                </div>
-                {/* Preferred row */}
-                <div style={{
-                  padding: "0.5rem 0.75rem",
-                  background: sellerType === "preferred" ? "var(--muted)" : "transparent",
-                  fontWeight: sellerType === "preferred" ? 600 : 400,
-                  color: sellerType === "preferred" ? "var(--primary)" : "var(--foreground)",
-                }}>
-                  Preferred
-                </div>
-                <div style={{
-                  padding: "0.5rem 0.75rem",
-                  background: sellerType === "preferred" ? "var(--muted)" : "transparent",
-                  color: "var(--muted-foreground)",
-                  borderLeft: "0.5px solid var(--border)",
-                }}>
-                  2.99% + $0.49
-                </div>
+
+                {/* Standard row — radio button inline */}
+                <label
+                  htmlFor="seller-standard"
+                  style={{
+                    display: "grid", gridTemplateColumns: "1fr 1fr",
+                    cursor: "pointer",
+                    background: sellerType === "standard" ? "var(--muted)" : "transparent",
+                    borderBottom: "0.5px solid var(--border)",
+                    transition: "background 0.15s",
+                  }}
+                >
+                  <div style={{
+                    padding: "0.55rem 0.75rem",
+                    display: "flex", alignItems: "center", gap: "0.5rem",
+                    fontWeight: sellerType === "standard" ? 600 : 400,
+                    color: sellerType === "standard" ? "var(--primary)" : "var(--foreground)",
+                  }}>
+                    <input
+                      type="radio"
+                      id="seller-standard"
+                      name="sellerType"
+                      value="standard"
+                      checked={sellerType === "standard"}
+                      onChange={() => setSellerType("standard")}
+                      style={{ accentColor: "var(--primary)", flexShrink: 0 }}
+                    />
+                    Standard
+                  </div>
+                  <div style={{
+                    padding: "0.55rem 0.75rem",
+                    color: "var(--muted-foreground)",
+                    borderLeft: "0.5px solid var(--border)",
+                    display: "flex", alignItems: "center",
+                  }}>
+                    3.19% + $0.49
+                  </div>
+                </label>
+
+                {/* Preferred row — radio button inline */}
+                <label
+                  htmlFor="seller-preferred"
+                  style={{
+                    display: "grid", gridTemplateColumns: "1fr 1fr",
+                    cursor: "pointer",
+                    background: sellerType === "preferred" ? "var(--muted)" : "transparent",
+                    transition: "background 0.15s",
+                  }}
+                >
+                  <div style={{
+                    padding: "0.55rem 0.75rem",
+                    display: "flex", alignItems: "center", gap: "0.5rem",
+                    fontWeight: sellerType === "preferred" ? 600 : 400,
+                    color: sellerType === "preferred" ? "var(--primary)" : "var(--foreground)",
+                  }}>
+                    <input
+                      type="radio"
+                      id="seller-preferred"
+                      name="sellerType"
+                      value="preferred"
+                      checked={sellerType === "preferred"}
+                      onChange={() => setSellerType("preferred")}
+                      style={{ accentColor: "var(--primary)", flexShrink: 0 }}
+                    />
+                    Preferred
+                  </div>
+                  <div style={{
+                    padding: "0.55rem 0.75rem",
+                    color: "var(--muted-foreground)",
+                    borderLeft: "0.5px solid var(--border)",
+                    display: "flex", alignItems: "center",
+                  }}>
+                    2.99% + $0.49
+                  </div>
+                </label>
               </div>
 
               <p className="text-muted text-xs" style={{ marginBottom: "0.5rem" }}>
