@@ -99,7 +99,7 @@ function Navbar() {
 
           {/*  <Link to="/"> navigates to the home route */}
           <Link to="/" className="logo" onClick={handleScrollToTop}>
-            <img src="/images/mporiums-logo.png" alt="M.Poriums" style={{ height: "32px" }} />
+            <img src="/images/mporiums-logo.png" alt="M.Poriums" style={{ height: "28px" }} />
           </Link>
 
           <div className="nav-links hide-mobile">
