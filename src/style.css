@@ -910,8 +910,10 @@ img { max-width: 100%; height: auto; display: block; }
   .hero { min-height: 60vh; }
   .hero-content { padding: 1rem; }
   .hero-badge { font-size: 0.65rem; padding: 0.25rem 0.75rem; }
-  .hero-actions { flex-direction: column; gap: 0.75rem; }
-  .hero-search { max-width: 100%; }
+  .hero-actions { flex-wrap: wrap; gap: 0.5rem; align-items: stretch; }
+  .hero-search { flex: 1; min-width: 160px; max-width: 100%; }
+  .hero-search input { padding: 0.75rem 2rem; font-size: 0.875rem; }
+  .hero-actions .btn { flex: 0 1 auto; white-space: nowrap; }
   
   /* Buttons */
   .btn { padding: 0.75rem 1rem; font-size: 0.875rem; min-height: 44px; }
