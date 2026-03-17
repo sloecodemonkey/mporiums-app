@@ -380,8 +380,8 @@ img { max-width: 100%; height: auto; display: block; }
 .dark .listing-card .listing-badge { background: hsla(0,0%,0%,0.5); color: hsl(0, 0%, 87%); }
 .listing-card .listing-heart {
   position: absolute; 
-  right: 0.75rem; 
-  top: 0.75rem;
+  right: 0.5rem; 
+  top: 0.5rem;
   width: 2rem; 
   height: 2rem; 
   display: flex; 
