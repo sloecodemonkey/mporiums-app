@@ -967,7 +967,7 @@ img { max-width: 100%; height: auto; display: block; }
   .icon-btn { min-width: 44px; min-height: 44px; }
   
   /* Grids & Layouts */
-  .listing-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .listing-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
   .category-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
   .steps-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .form-grid-2 { grid-template-columns: 1fr; gap: 0.75rem; }
@@ -1115,7 +1115,7 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-title { font-size: 2.75rem; }
   
   /* Grids */
-  .listing-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .listing-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
   .category-grid { grid-template-columns: repeat(3, 1fr); }
   .steps-grid { grid-template-columns: repeat(2, 1fr); }
   .form-grid-2 { grid-template-columns: repeat(2, 1fr); }
