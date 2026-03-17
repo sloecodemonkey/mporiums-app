@@ -1,9 +1,9 @@
 // ============================================================
 // Auth.jsx
-
 // ============================================================
-
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { login, register } from "../utils/api";
 
 function Auth() {
 
@@ -11,42 +11,38 @@ function Auth() {
   // STATE
   // ----------------------------------------------------------
 
-
-  const [isLoginMode, setIsLoginMode] = useState(true);
-
-
+  const [isLoginMode, setIsLoginMode]     = useState(true);
   const [profilePreview, setProfilePreview] = useState(null);
-
-
+  const [error, setError]                 = useState("");      // ← NEW: shows API errors
+  const [loading, setLoading]             = useState(false);   // ← NEW: disables button while waiting
   const fileInputRef = useRef(null);
+
+  // ← NEW: lets us navigate to home after successful login
+  const navigate = useNavigate();
 
   // ----------------------------------------------------------
   // FUNCTIONS
   // ----------------------------------------------------------
 
-
   function toggleMode() {
     setIsLoginMode(!isLoginMode);
-    setProfilePreview(null); // reset preview when switching modes
+    setProfilePreview(null);
+    setError("");   // ← NEW: clear any errors when switching modes
   }
-
 
   function handleProfilePictureUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-
 
     if (file.size > 5 * 1024 * 1024) {
       alert("File size must be less than 5MB");
       return;
     }
 
-
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file");
       return;
     }
-
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -55,15 +51,45 @@ function Auth() {
     reader.readAsDataURL(file);
   }
 
-  // Handle form submission
-
-  function handleAuth(e) {
+  // ── UPDATED: handleAuth now calls the real API ─────────────
+  // Was: alert("Sign in functionality requires backend integration.")
+  // Now: calls login() or register() from utils/api.js,
+  //      saves the token to localStorage on success,
+  //      shows the API error message if something goes wrong.
+  async function handleAuth(e) {
     e.preventDefault();
-    alert(
-      isLoginMode
-        ? "Sign in functionality requires backend integration."
-        : "Sign up functionality requires backend integration."
-    );
+    setError("");       // clear previous errors
+    setLoading(true);   // disable button and show "Please wait..."
+
+    try {
+      if (isLoginMode) {
+        // ── SIGN IN ──────────────────────────────────────────
+        // Reads email + password directly from the form fields
+        await login(
+          e.target.email.value,
+          e.target.password.value
+        );
+      } else {
+        // ── SIGN UP ──────────────────────────────────────────
+        // Reads email, password, and displayName from the form.
+        // Falls back to the email if displayName is empty.
+        await register(
+          e.target.email.value,
+          e.target.password.value,
+          e.target.displayName?.value || e.target.email.value
+        );
+      }
+
+      // Success — navigate to home page
+      navigate("/");
+
+    } catch (err) {
+      // Show the error message from the API
+      // e.g. "Invalid email or password" or "Email already exists"
+      setError(err.message);
+    } finally {
+      setLoading(false); // re-enable the button whether it worked or not
+    }
   }
 
   // ----------------------------------------------------------
@@ -74,14 +100,12 @@ function Auth() {
     <main className="page-main center-content">
       <div className="auth-card">
 
-        {/* TITLE
-            */}
+        {/* TITLE */}
         <h1 className="auth-title">
           {isLoginMode ? "Welcome Back" : "Create Account"}
         </h1>
 
-        {/* SUBTITLE
-            */}
+        {/* SUBTITLE */}
         <p className="text-muted">
           {isLoginMode
             ? "Sign in to manage your listings"
@@ -90,8 +114,7 @@ function Auth() {
 
         <form onSubmit={handleAuth} style={{ marginTop: "2rem" }}>
 
-          {/* SIGNUP-ONLY FIELDS
-              */}
+          {/* SIGNUP-ONLY FIELDS */}
           {!isLoginMode && (
             <div>
 
@@ -102,8 +125,7 @@ function Auth() {
                 </label>
                 <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
 
-                  {/* Preview circle
-                       */}
+                  {/* Preview circle */}
                   <div style={{
                     width: "6rem", height: "6rem",
                     border: "2px solid var(--border)", borderRadius: "50%",
@@ -123,8 +145,7 @@ function Auth() {
                   </div>
 
                   <div style={{ flex: 1 }}>
-                    {/* Upload area
-                         */}
+                    {/* Upload area */}
                     <div
                       className="upload-area"
                       onClick={() => fileInputRef.current.click()}
@@ -140,8 +161,7 @@ function Auth() {
                       </span>
                     </div>
 
-                    {/* Hidden file input
-                        */}
+                    {/* Hidden file input */}
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -194,7 +214,7 @@ function Auth() {
             </div>
           )}
 
-          {/*  */}
+          {/* Email + Password — shown in both modes */}
           <div className="form-group">
             <label>Email</label>
             <input type="email" name="email" required placeholder="you@example.com" />
@@ -204,17 +224,42 @@ function Auth() {
             <input type="password" name="password" required minLength={6} placeholder="••••••••" />
           </div>
 
+          {/* ── NEW: Error message from API ──────────────────────
+              Shows when login fails e.g. wrong password,
+              or when register fails e.g. email already taken.
+              Hidden when error is empty string. */}
+          {error && (
+            <p style={{
+              color: "var(--destructive)",
+              fontSize: "0.875rem",
+              marginBottom: "1rem",
+              padding: "0.6rem 0.75rem",
+              background: "var(--muted)",
+              borderRadius: "var(--radius)",
+              border: "0.5px solid var(--destructive)",
+            }}>
+              {error}
+            </p>
+          )}
+
           {/* SUBMIT BUTTON
-               */}
-          <button type="submit" className="btn btn-primary btn-full">
-            {isLoginMode ? "Sign In" : "Sign Up"}
+              ── UPDATED: disabled while loading, text changes to
+              "Please wait..." so the user knows it's working. */}
+          <button
+            type="submit"
+            className="btn btn-primary btn-full"
+            disabled={loading}
+            style={{ opacity: loading ? 0.7 : 1 }}
+          >
+            {loading
+              ? "Please wait..."
+              : isLoginMode ? "Sign In" : "Sign Up"}
           </button>
         </form>
 
         <hr className="separator" />
 
-        {/* TOGGLE LINK
-             */}
+        {/* TOGGLE LINK */}
         <p className="auth-toggle">
           <span style={{ marginRight: "25px" }}>
             {isLoginMode ? "Don't have an account?" : "Already have an account?"}
