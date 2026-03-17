@@ -1,69 +1,76 @@
 // ============================================================
-// ProductCard.jsx
-// Converted from renderListingCard() in script.js
+// ProductCard.jsx — updated to use WishlistContext
+// ============================================================
+// The heart button previously toggled a local useState(false)
+// that only existed inside this one card instance.
+// That meant:
+//   - Refreshing the page reset all hearts to empty
+//   - The Wishlist page had no way to know which items were saved
+//   - Clicking heart on the Shop page didn't reflect on Home page
+//
+// Now:
+//   - useWishlist() connects to the shared WishlistContext
+//   - isWishlisted(product.id) checks if THIS product is saved
+//   - toggleWishlist(product) adds or removes it from the list
+//   - The heart state is consistent everywhere on the site
+//   - It persists across page refreshes via localStorage
 // ============================================================
 
-
-import { useState } from "react";
-
-
 import { Link } from "react-router-dom";
+import { useWishlist } from "../context/WishlistContext";
 
-function ProductCard({ product, onAddToCart }) {
+function ProductCard({ product }) {
 
-  // ----------------------------------------------------------
-  // STATE
-  // ----------------------------------------------------------
+  // Get wishlist functions from context
+  // isWishlisted → checks if this product is already saved
+  // toggleWishlist → adds or removes it
+  const { isWishlisted, toggleWishlist } = useWishlist();
 
+  // Is THIS specific product currently in the wishlist?
+  const wishlisted = isWishlisted(product.id);
 
-  const [wishlisted, setWishlisted] = useState(false);
-
-  // ----------------------------------------------------------
-  // FUNCTIONS
-  // ----------------------------------------------------------
-
-
+  // Handle heart button click
+  // e.preventDefault() stops the Link from navigating
+  // e.stopPropagation() stops the click bubbling to the parent Link
   function handleWishlistClick(e) {
-    e.preventDefault();      // stop any default browser behaviour
-    e.stopPropagation();     // stop the click reaching the parent <Link>
-    setWishlisted(!wishlisted); // toggle the heart on/off
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product); // pass the full product object
   }
 
-  // ----------------------------------------------------------
-  // JSX — 
-  // ----------------------------------------------------------
-
   return (
-  
     <Link to={`/product/${product.id}`} className="card listing-card">
 
       {/* ── IMAGE SECTION ── */}
       <div className="listing-image">
-
-        {/*  */}
         <img
           src={product.images[0]}
           alt={product.title}
           loading="lazy"
         />
 
-        {/* Condition badge  */}
         <span className="listing-badge">{product.condition}</span>
 
-        {/* Wishlist heart button
-            */}
+        {/* Heart button — filled red when wishlisted, outline when not */}
         <button
           className="listing-heart"
           onClick={handleWishlistClick}
-          aria-label="Save to wishlist"
+          aria-label={wishlisted ? "Remove from wishlist" : "Save to wishlist"}
+          title={wishlisted ? "Remove from wishlist" : "Save to wishlist"}
+          style={{
+            // Subtle scale-up when active so the user gets clear feedback
+            transform: wishlisted ? "scale(1.1)" : "scale(1)",
+            transition: "transform 0.15s",
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             viewBox="0 0 24 24"
-            fill={wishlisted ? "currentColor" : "none"}
-            stroke="currentColor"
+            // Filled red when wishlisted, outline when not
+            fill={wishlisted ? "var(--primary)" : "none"}
+            stroke={wishlisted ? "var(--primary)" : "currentColor"}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -75,23 +82,11 @@ function ProductCard({ product, onAddToCart }) {
 
       {/* ── BODY SECTION ── */}
       <div className="listing-body">
-
-        {/* Category label — e.g. "Guitars & Basses"
-             */}
         <p className="listing-category">{product.category}</p>
-
-        {/* Product title
-            \ */}
         <h3 className="listing-title">{product.title}</h3>
-
-        {/* Price — toLocaleString() adds commas e.g. $1,450
-             */}
         <p className="listing-price">${product.price.toLocaleString()}</p>
 
-        {/* ── META ROW: verified badge, seller name, rating ── */}
         <div className="listing-meta">
-
-          {/*  */}
           <span className="listing-verified">
             {product.verified && (
               <img
@@ -101,12 +96,7 @@ function ProductCard({ product, onAddToCart }) {
               />
             )}
           </span>
-
-          {/* Seller name */}
           <span className="listing-seller">{product.seller}</span>
-
-          {/* Star rating — only show if rating is greater than 0
-               */}
           <span className="listing-rating">
             {product.rating > 0 && (
               <>
@@ -114,11 +104,9 @@ function ProductCard({ product, onAddToCart }) {
                   src="/icons/star.svg"
                   alt="Rating"
                   style={{
-                    width: "30px",
-                    height: "30px",
-                    display: "inline",
-                    verticalAlign: "middle",
-                    marginRight: "0.25rem"
+                    width: "30px", height: "30px",
+                    display: "inline", verticalAlign: "middle",
+                    marginRight: "0.25rem",
                   }}
                 />
                 {product.rating}
