@@ -26,6 +26,7 @@
 //     VITE_API_URL=http://localhost:4000/api      (local)
 //     VITE_API_URL=https://your-app.railway.app/api  (deployed)
 // ============================================================
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5175/api";
 
