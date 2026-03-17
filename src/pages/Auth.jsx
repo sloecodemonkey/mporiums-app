@@ -3,7 +3,7 @@
 // ============================================================
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, register } from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 
 function Auth() {
 
@@ -19,6 +19,7 @@ function Auth() {
 
   // ← NEW: lets us navigate to home after successful login
   const navigate = useNavigate();
+  const { login, register } = useAuth();
 
   // ----------------------------------------------------------
   // FUNCTIONS

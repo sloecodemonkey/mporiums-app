@@ -1,87 +1,49 @@
 // ============================================================
-// Navbar.jsx
-// Converted from index.html + script.js for M.Poriums
+// Navbar.jsx — updated with AuthContext
 // ============================================================
 
-// STEP 1: Import the tools we need from React
-// Think of these like ingredients you pull out before cooking.
-// - useState: lets us remember things (is the menu open? is dark mode on?)
-// - useEffect: lets us run code when the page first loads
 import { useState, useEffect } from "react";
-
-// STEP 2: Import Link and useNavigate from React Router
-// In your old HTML, you used onclick="showPage('shop')" to change pages.
-// In React, we use <Link> tags and useNavigate() instead.
-// Link = a clickable link that changes the page without a full reload
-// useNavigate = a function that changes the page from inside your code (e.g. after a search)
 import { Link, useNavigate } from "react-router-dom";
-
-// useCart gives us the cart from CartContext — no prop needed anymore
-import { useCart } from "../context/CartContext";
+import { useCart }     from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { useAuth }     from "../context/AuthContext";
 
-// ============================================================
-// The Navbar Component
-// ============================================================
-// In your old code, the navbar was just HTML sitting in index.html.
-// Now it's a self-contained function that manages its own logic.
-//
-// No props needed anymore — cart comes from CartContext via useCart()
 function Navbar() {
 
-  // Get cart data from CartContext
-  const { totals } = useCart();
+  const { totals }              = useCart();
+  const { wishlist }            = useWishlist();
+  const { user, isLoggedIn, logout } = useAuth();
 
-  // Get wishlist count from WishlistContext — shows the badge on the heart icon
-  const { wishlist } = useWishlist();
-
-  // ----------------------------------------------------------
-  // STATE — these replace your global JS variables in script.js
-  // ----------------------------------------------------------
-
-  // Was:  jQuery("#mobileMenu").slideToggle(200)
-  // Now:  we store true/false, and the JSX shows/hides based on it
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  // Was:  var searchQuery = ""  (global variable)
-  // Now:  it lives inside this component and updates the input in real time
+  const [menuOpen, setMenuOpen]       = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDark, setIsDark]           = useState(false);
 
-  // Was:  localStorage.getItem("theme") checked in initTheme()
-  // Now:  we store true/false for dark mode here
-  const [isDark, setIsDark] = useState(false);
+  // Dropdown open/closed — shows when user clicks their avatar
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  // ----------------------------------------------------------
-  // useNavigate — replaces showPage() for search redirects
-  // ----------------------------------------------------------
-  // Was:  function handleNavSearch(e) { showPage("shop"); }
-  // Now:  navigate("/shop") does the same thing
   const navigate = useNavigate();
 
-  // ----------------------------------------------------------
-  // useEffect — replaces your initTheme() function
-  // ----------------------------------------------------------
-  // Was:  jQuery(function() { initTheme(); });  ← ran on page load
-  // Now:  useEffect with [] runs exactly once when the component loads
-  //
-  // The [] at the end means "only run this once, on first load"
-  // If you left it out, it would run on EVERY re-render (bad!)
+  // Load saved theme on first render
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
     if (saved === "dark" || (!saved && prefersDark)) {
       setIsDark(true);
-      document.body.classList.add("dark"); // your CSS still uses .dark on body
+      document.body.classList.add("dark");
     }
-  }, []); // ← the empty [] means "run once on load"
+  }, []);
 
-  // ----------------------------------------------------------
-  // FUNCTIONS — these replace your jQuery functions in script.js
-  // ----------------------------------------------------------
+  // Close user dropdown when clicking anywhere outside it
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (!e.target.closest("#user-menu-wrapper")) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  // Was:  function toggleTheme() { jQuery("body").toggleClass("dark"); ... }
-  // Now:  we flip isDark true/false, and use that to update the body class
   function handleToggleTheme() {
     const newDark = !isDark;
     setIsDark(newDark);
@@ -89,34 +51,27 @@ function Navbar() {
     localStorage.setItem("theme", newDark ? "dark" : "light");
   }
 
-  // Was:  function handleNavSearch(e) { e.preventDefault(); showPage("shop"); }
-  // Now:  same idea — prevent the form from refreshing the page, then navigate
   function handleSearchSubmit(e) {
-    e.preventDefault(); // stops the browser from doing a full page reload
+    e.preventDefault();
     const trimmed = searchQuery.trim();
     if (trimmed) {
-      navigate("/shop"); // go to the shop page
-      setSearchQuery(""); // clear the search box
-      setMenuOpen(false); // close mobile menu if open
+      navigate(`/shop?search=${encodeURIComponent(trimmed)}`);
+      setSearchQuery("");
+      setMenuOpen(false);
     }
   }
 
-  // Was:  function toggleMobileMenu() { jQuery("#mobileMenu").slideToggle(200); }
-  // Now:  just flip menuOpen between true and false
   function handleToggleMobileMenu() {
     setMenuOpen(!menuOpen);
   }
 
-  // ----------------------------------------------------------
-  // THE JSX — this replaces your HTML navbar block
-  // ----------------------------------------------------------
-  // Key differences from your HTML:
-  //   class=""      →  className=""       (React uses className)
-  //   onclick=""    →  onClick={}         (camelCase, curly braces)
-  //   onsubmit=""   →  onSubmit={}
-  //   style=""      →  style={{}}         (double curly braces, camelCase)
-  //   {isDark}      →  a JS variable      (curly braces = "use JS here")
-  // ----------------------------------------------------------
+  // Sign out — clears auth state and goes to home page
+  function handleLogout() {
+    logout();
+    setUserMenuOpen(false);
+    setMenuOpen(false);
+    navigate("/");
+  }
 
   return (
     <nav className="navbar" id="navbar">
@@ -124,36 +79,24 @@ function Navbar() {
 
         {/* ── LEFT: Logo + Nav Links ── */}
         <div className="navbar-left">
-
-          {/* Was: <a href="#" onclick="showPage('home')">
-              Now: <Link to="/"> navigates to the home route */}
           <Link to="/" className="logo">
             <img src="/images/mporiums-logo.png" alt="M.Poriums" style={{ height: "32px" }} />
           </Link>
 
           <div className="nav-links hide-mobile">
-            {/* Was: <a href="#" onclick="showPage('shop')" class="nav-link">Shop</a>
-                Now: <Link to="/shop"> — no onclick needed, routing is automatic */}
-            <Link to="/shop" className="nav-link">Shop</Link>
-            <Link to="/sell" className="nav-link">Sell</Link>
-            <a href="#" className="nav-link">Deals</a>
-            <a href="#" className="nav-link">Community</a>
+            <Link to="/shop"  className="nav-link">Shop</Link>
+            <Link to="/sell"  className="nav-link">Sell</Link>
+            <a href="#"       className="nav-link">Deals</a>
+            <a href="#"       className="nav-link">Community</a>
           </div>
         </div>
 
         {/* ── CENTER: Search Bar ── */}
-        {/* Was: <form class="search-bar" onsubmit="handleNavSearch(event)">
-            Now: onSubmit calls our function above.
-            The input uses value={searchQuery} + onChange to stay in sync with state.
-            This is called a "controlled input" — React owns the value. */}
         <form className="search-bar hide-mobile" onSubmit={handleSearchSubmit}>
           <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/>
             <path d="m21 21-4.3-4.3"/>
           </svg>
-          {/* Was: <input type="text" id="navSearchInput" />
-              Now: value ties the input to our searchQuery state
-                   onChange updates the state every time the user types */}
           <input
             type="text"
             placeholder="Search gear, instruments, brands..."
@@ -162,29 +105,16 @@ function Navbar() {
           />
         </form>
 
-        {/* ── RIGHT: Theme Toggle, Cart, Sign In, Hamburger ── */}
+        {/* ── RIGHT: Icons + User ── */}
         <div className="navbar-right">
 
-          {/* THEME TOGGLE BUTTON
-              Was: <button onclick="toggleTheme()">
-                     <svg id="sunIcon" />
-                     <svg id="moonIcon" style="display:none;" />
-                   </button>
-              Now: we show one icon OR the other based on isDark.
-                   {isDark ? <Moon /> : <Sun />} means:
-                   "if isDark is true, show the moon icon, otherwise show the sun" */}
-          <button
-            className="btn btn-ghost icon-btn"
-            onClick={handleToggleTheme}
-            title="Toggle theme"
-          >
+          {/* THEME TOGGLE */}
+          <button className="btn btn-ghost icon-btn" onClick={handleToggleTheme} title="Toggle theme">
             {isDark ? (
-              // Moon icon — shown when dark mode is ON
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
             ) : (
-              // Sun icon — shown when dark mode is OFF
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="5"/>
                 <line x1="12" y1="1" x2="12" y2="3"/>
@@ -199,47 +129,165 @@ function Navbar() {
             )}
           </button>
 
-          {/* WISHLIST BUTTON
-              Heart icon with badge count
-              Filled red when wishlist has items */}
+          {/* WISHLIST */}
           <Link to="/wishlist" className="btn btn-ghost icon-btn" title="Saved items">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={wishlist.length > 0 ? "var(--primary)" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              fill={wishlist.length > 0 ? "var(--primary)" : "none"}
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
             </svg>
-            {/* Show wishlist count badge when there are saved items */}
             {wishlist.length > 0 && (
               <span className="cart-badge">{wishlist.length}</span>
             )}
           </Link>
 
-          {/* CART BUTTON
-              Was: <a href="#" onclick="showPage('cart')">
-                     <span id="cartBadge" style="display:none;">0</span>
-                   </a>
-              Now: Link navigates to /cart automatically.
-                   The badge: totals.itemCount is the total number of items.
-                   {totals.itemCount > 0 && <span>} means:
-                   "only show the badge if there's at least 1 item in the cart" */}
+          {/* CART */}
           <Link to="/cart" className="btn btn-ghost icon-btn cart-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="8" cy="21" r="1"/>
               <circle cx="19" cy="21" r="1"/>
               <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
             </svg>
-            {/* Only show the badge when cart has items */}
             {totals.itemCount > 0 && (
               <span className="cart-badge">{totals.itemCount}</span>
             )}
           </Link>
 
-          {/* SIGN IN BUTTON (desktop only) */}
-          <Link to="/auth" className="btn btn-primary hide-mobile">
-            Sign In
-          </Link>
+          {/* ── USER SECTION ────────────────────────────────────
+              Shows Sign In button when logged out.
+              Shows user avatar + dropdown when logged in. */}
+          {!isLoggedIn ? (
 
-          {/* HAMBURGER BUTTON (mobile only)
-              Was: onclick="toggleMobileMenu()"
-              Now: onClick={handleToggleMobileMenu} flips menuOpen state */}
+            // ── NOT LOGGED IN — show Sign In button ────────────
+            <Link to="/auth" className="btn btn-primary hide-mobile">
+              Sign In
+            </Link>
+
+          ) : (
+
+            // ── LOGGED IN — show avatar + dropdown ─────────────
+            <div id="user-menu-wrapper" style={{ position: "relative" }}>
+
+              {/* Avatar button — clicking opens the dropdown */}
+              <button
+                className="btn btn-ghost icon-btn"
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                title={user?.displayName || "My Account"}
+                style={{
+                  display: "flex", alignItems: "center", gap: "0.5rem",
+                  padding: "0.25rem 0.5rem",
+                }}
+              >
+                {/* Avatar circle with user initials */}
+                <div style={{
+                  width: "2rem", height: "2rem", borderRadius: "50%",
+                  background: "var(--primary)", color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "0.75rem", fontWeight: 700, flexShrink: 0,
+                }}>
+                  {user?.avatar || user?.displayName?.slice(0, 2).toUpperCase() || "ME"}
+                </div>
+
+                {/* Display name — hidden on small screens */}
+                <span className="hide-mobile" style={{ fontSize: "0.875rem", fontWeight: 500, maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {user?.displayName || "My Account"}
+                </span>
+
+                {/* Chevron down arrow */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hide-mobile">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              {/* ── DROPDOWN MENU ──────────────────────────────
+                  Only renders when userMenuOpen is true */}
+              {userMenuOpen && (
+                <div style={{
+                  position: "absolute", top: "calc(100% + 8px)", right: 0,
+                  background: "var(--card)",
+                  border: "0.5px solid var(--border)",
+                  borderRadius: "var(--radius)",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                  minWidth: "200px", zIndex: 1000,
+                  overflow: "hidden",
+                }}>
+
+                  {/* User info header */}
+                  <div style={{
+                    padding: "0.875rem 1rem",
+                    borderBottom: "0.5px solid var(--border)",
+                    background: "var(--muted)",
+                  }}>
+                    <p style={{ fontWeight: 600, fontSize: "0.875rem", margin: 0 }}>
+                      {user?.displayName}
+                    </p>
+                    <p style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", margin: 0 }}>
+                      {user?.email}
+                    </p>
+                    {/* Seller type badge */}
+                    <span style={{
+                      display: "inline-block", marginTop: "0.35rem",
+                      fontSize: "0.65rem", fontWeight: 600,
+                      padding: "1px 7px", borderRadius: "20px",
+                      background: user?.sellerType === "preferred" ? "var(--primary)" : "var(--secondary)",
+                      color: user?.sellerType === "preferred" ? "#fff" : "var(--muted-foreground)",
+                    }}>
+                      {user?.sellerType === "preferred" ? "Preferred Seller" : "Standard Seller"}
+                    </span>
+                  </div>
+
+                  {/* Menu links */}
+                  {[
+                    { to: "/account",      label: "My Account",    icon: "👤" },
+                    { to: "/my-listings",  label: "My Listings",   icon: "📦" },
+                    { to: "/wishlist",     label: "Saved Items",   icon: "♡" },
+                    { to: "/messages",     label: "Messages",      icon: "💬" },
+                  ].map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setUserMenuOpen(false)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: "0.6rem",
+                        padding: "0.65rem 1rem",
+                        fontSize: "0.875rem",
+                        color: "var(--foreground)",
+                        textDecoration: "none",
+                        borderBottom: "0.5px solid var(--border)",
+                        transition: "background 0.1s",
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "var(--muted)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                    >
+                      <span style={{ fontSize: "0.9rem" }}>{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  ))}
+
+                  {/* Sign Out */}
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "0.6rem",
+                      width: "100%", padding: "0.65rem 1rem",
+                      fontSize: "0.875rem",
+                      color: "var(--destructive)",
+                      background: "transparent", border: "none",
+                      cursor: "pointer", textAlign: "left",
+                      transition: "background 0.1s",
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--muted)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  >
+                    <span style={{ fontSize: "0.9rem" }}>🚪</span>
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* HAMBURGER (mobile only) */}
           <button
             className="btn btn-ghost icon-btn show-mobile"
             onClick={handleToggleMobileMenu}
@@ -253,17 +301,9 @@ function Navbar() {
         </div>
       </div>
 
-      {/* ── MOBILE MENU ──
-          Was: <div id="mobileMenu" style="display:none;">
-               shown/hidden with jQuery("#mobileMenu").slideToggle(200)
-
-          Now: {menuOpen && <div>...} means
-               "only render this div if menuOpen is true"
-               When menuOpen is false, the whole block disappears from the page. */}
+      {/* ── MOBILE MENU ── */}
       {menuOpen && (
         <div className="mobile-menu">
-
-          {/* Mobile search — same controlled input pattern as desktop */}
           <form onSubmit={handleSearchSubmit} className="mobile-search">
             <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/>
@@ -277,28 +317,45 @@ function Navbar() {
             />
           </form>
 
-          {/* Mobile nav links
-              Was: onclick="showPage('shop');toggleMobileMenu()"
-              Now: onClick closes the menu, Link handles navigation */}
-          <Link to="/shop" className="mobile-link" onClick={() => setMenuOpen(false)}>Shop</Link>
-          <Link to="/sell" className="mobile-link" onClick={() => setMenuOpen(false)}>Sell</Link>
-          <a href="#" className="mobile-link">Deals</a>
-          <a href="#" className="mobile-link">Community</a>
-          <Link
-            to="/auth"
-            className="mobile-link"
-            onClick={() => setMenuOpen(false)}
-            style={{ color: "var(--primary)" }}
-          >
-            Sign In / Sign Up
-          </Link>
+          <Link to="/shop"  className="mobile-link" onClick={() => setMenuOpen(false)}>Shop</Link>
+          <Link to="/sell"  className="mobile-link" onClick={() => setMenuOpen(false)}>Sell</Link>
+          <a href="#"       className="mobile-link">Deals</a>
+          <a href="#"       className="mobile-link">Community</a>
+
+          {/* Show account links when logged in, sign in link when not */}
+          {isLoggedIn ? (
+            <>
+              <Link to="/account"     className="mobile-link" onClick={() => setMenuOpen(false)}>My Account</Link>
+              <Link to="/my-listings" className="mobile-link" onClick={() => setMenuOpen(false)}>My Listings</Link>
+              <Link to="/wishlist"    className="mobile-link" onClick={() => setMenuOpen(false)}>Saved Items</Link>
+              <Link to="/messages"    className="mobile-link" onClick={() => setMenuOpen(false)}>Messages</Link>
+              <button
+                className="mobile-link"
+                onClick={handleLogout}
+                style={{
+                  background: "none", border: "none", width: "100%",
+                  textAlign: "left", cursor: "pointer",
+                  color: "var(--destructive)", padding: 0,
+                  fontSize: "inherit",
+                }}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className="mobile-link"
+              onClick={() => setMenuOpen(false)}
+              style={{ color: "var(--primary)" }}
+            >
+              Sign In / Sign Up
+            </Link>
+          )}
         </div>
       )}
     </nav>
   );
 }
 
-// STEP 3: Export the component
-// This is like making the component available for other files to use.
-// In your App.jsx you'll do: import Navbar from "./components/Navbar";
 export default Navbar;
