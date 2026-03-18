@@ -26,6 +26,11 @@ import MyListings     from "./pages/MyListings";
 import Inbox          from "./pages/Inbox";
 import Conversation   from "./pages/Conversation";
 import HelpCenter     from "./pages/HelpCenter";
+import Deals          from "./pages/Deals";
+import PriceGuide     from "./pages/PriceGuide";
+import OrderHistory   from "./pages/OrderHistory";
+import EditListing    from "./pages/EditListing";
+import SellerDashboard from "./pages/SellerDashboard";
 import { PaymentSuccess } from "./pages/ExtraPages";
 import { NotFound }       from "./pages/ExtraPages";
 
@@ -50,23 +55,28 @@ function App() {
               <Navbar />
 
               <Routes>
-                <Route path="/"                         element={<Home />}           />
-                <Route path="/shop"                     element={<Shop />}           />
-                <Route path="/product/:id"              element={<ProductDetail />}  />
-                <Route path="/seller/:sellerName"       element={<SellerProfile />}  />
-                <Route path="/cart"                     element={<Cart />}           />
-                <Route path="/checkout"                 element={<Checkout />}       />
-                <Route path="/auth"                     element={<Auth />}           />
-                <Route path="/sell"                     element={<Sell />}           />
-                <Route path="/account"                  element={<Account />}        />
-                <Route path="/wishlist"                 element={<Wishlist />}       />
-                <Route path="/my-listings"              element={<MyListings />}     />
-                <Route path="/messages"                 element={<Inbox />}          />
-                <Route path="/messages/:conversationId" element={<Conversation />}  />
-                <Route path="/help"                     element={<HelpCenter />}     />
-                <Route path="/success"                  element={<PaymentSuccess />} />
+                <Route path="/"                         element={<Home />}            />
+                <Route path="/shop"                     element={<Shop />}            />
+                <Route path="/product/:id"              element={<ProductDetail />}   />
+                <Route path="/seller/:sellerName"       element={<SellerProfile />}   />
+                <Route path="/cart"                     element={<Cart />}            />
+                <Route path="/checkout"                 element={<Checkout />}        />
+                <Route path="/auth"                     element={<Auth />}            />
+                <Route path="/sell"                     element={<Sell />}            />
+                <Route path="/sell/edit/:id"            element={<EditListing />}     />
+                <Route path="/account"                  element={<Account />}         />
+                <Route path="/wishlist"                 element={<Wishlist />}        />
+                <Route path="/my-listings"              element={<MyListings />}      />
+                <Route path="/messages"                 element={<Inbox />}           />
+                <Route path="/messages/:conversationId" element={<Conversation />}   />
+                <Route path="/help"                     element={<HelpCenter />}      />
+                <Route path="/deals"                    element={<Deals />}           />
+                <Route path="/price-guide"              element={<PriceGuide />}      />
+                <Route path="/orders"                   element={<OrderHistory />}    />
+                <Route path="/dashboard"                element={<SellerDashboard />} />
+                <Route path="/success"                  element={<PaymentSuccess />}  />
                 {/* Catches any URL that doesn't match — shows 404 page */}
-                <Route path="*"                         element={<NotFound />}       />
+                <Route path="*"                         element={<NotFound />}        />
               </Routes>
 
               <Footer />
