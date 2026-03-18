@@ -86,7 +86,7 @@ function Navbar() {
           <div className="nav-links hide-mobile">
             <Link to="/shop"  className="nav-link">Shop</Link>
             <Link to="/sell"  className="nav-link">Sell</Link>
-            <a href="#"       className="nav-link">Deals</a>
+            <Link to="/deals" className="nav-link">Deals</Link>
             <a href="#"       className="nav-link">Community</a>
           </div>
         </div>
@@ -242,7 +242,9 @@ function Navbar() {
                   {[
                     { to: "/account",      label: "My Account",    icon: "👤" },
                     { to: "/my-listings",  label: "My Listings",   icon: "📦" },
-                    { to: "/wishlist",     label: "Saved Items",   icon: "♡" },
+                    { to: "/dashboard",    label: "Dashboard",     icon: "📊" },
+                    { to: "/orders",       label: "Order History", icon: "🧾" },
+                    { to: "/wishlist",     label: "Saved Items",   icon: "♡"  },
                     { to: "/messages",     label: "Messages",      icon: "💬" },
                   ].map((item) => (
                     <Link
@@ -321,7 +323,7 @@ function Navbar() {
 
           <Link to="/shop"  className="mobile-link" onClick={() => setMenuOpen(false)}>Shop</Link>
           <Link to="/sell"  className="mobile-link" onClick={() => setMenuOpen(false)}>Sell</Link>
-          <a href="#"       className="mobile-link">Deals</a>
+          <Link to="/deals" className="mobile-link" onClick={() => setMenuOpen(false)}>Deals</Link>
           <a href="#"       className="mobile-link">Community</a>
 
           {/* Show account links when logged in, sign in link when not */}
@@ -329,6 +331,8 @@ function Navbar() {
             <>
               <Link to="/account"     className="mobile-link" onClick={() => setMenuOpen(false)}>My Account</Link>
               <Link to="/my-listings" className="mobile-link" onClick={() => setMenuOpen(false)}>My Listings</Link>
+              <Link to="/dashboard"   className="mobile-link" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link to="/orders"      className="mobile-link" onClick={() => setMenuOpen(false)}>Order History</Link>
               <Link to="/wishlist"    className="mobile-link" onClick={() => setMenuOpen(false)}>Saved Items</Link>
               <Link to="/messages"    className="mobile-link" onClick={() => setMenuOpen(false)}>Messages</Link>
               <button
