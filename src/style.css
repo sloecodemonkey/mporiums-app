@@ -672,6 +672,11 @@ img { max-width: 100%; height: auto; display: block; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
+.help-card-grid > *,
+.help-policy-grid > *,
+.help-contact-grid > * {
+  min-width: 0;
+}
 .help-fee-controls {
   display: flex;
   gap: 1rem;
@@ -692,6 +697,11 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .help-faq-question {
   min-width: 0;
+}
+.help-content p,
+.help-faq-question,
+.help-contact-grid a {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 1024px) {
@@ -1170,6 +1180,11 @@ img { max-width: 100%; height: auto; display: block; }
   .help-search input {
     width: 100%;
   }
+  .help-fee-table th,
+  .help-fee-table td {
+    padding: 0.625rem 0.75rem !important;
+    font-size: 0.8rem;
+  }
   
   /* Listing cards - better spacing on mobile */
   .listing-card { 
@@ -1204,6 +1219,53 @@ img { max-width: 100%; height: auto; display: block; }
   
   /* Info box */
   .info-box { gap: 0.5rem; padding: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .help-sidebar-card {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  .help-sidebar-card button {
+    width: 100%;
+    white-space: normal;
+  }
+  .help-table-wrap {
+    overflow: visible;
+  }
+  .help-fee-table,
+  .help-fee-table tbody,
+  .help-fee-table tr,
+  .help-fee-table td {
+    display: block;
+    width: 100%;
+  }
+  .help-fee-table thead {
+    display: none;
+  }
+  .help-fee-table tr {
+    padding: 0.625rem 0.875rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .help-fee-table tr:last-child {
+    border-bottom: none;
+  }
+  .help-fee-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.35rem 0 !important;
+    border: none !important;
+    font-size: 0.8rem;
+  }
+  .help-fee-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--foreground);
+    flex: 0 0 45%;
+  }
 }
 
 /* ── MEDIUM DEVICES (481px - 768px) ── */

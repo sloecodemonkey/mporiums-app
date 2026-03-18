@@ -15,6 +15,9 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMessaging } from "../context/MessagingContext";
 
+const URL_PATTERN = /(https?:\/\/[^\s]+)/g;
+const FULL_URL_PATTERN = /^https?:\/\/[^\s]+$/;
+
 // ── Format timestamp for message bubbles ────────────────────
 function formatTime(isoString) {
   if (!isoString) return "";
@@ -25,6 +28,36 @@ function formatTime(isoString) {
     return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
   }
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+
+function renderMessageText(text) {
+  if (!text) return null;
+
+  return text.split(URL_PATTERN).map((part, index) => {
+    if (!part) return null;
+
+    if (FULL_URL_PATTERN.test(part)) {
+      return (
+        <a
+          key={`${part}-${index}`}
+          href={part}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            color: "inherit",
+            textDecoration: "underline",
+            overflowWrap: "anywhere",
+            wordBreak: "break-word",
+          }}
+          onClick={(event) => event.stopPropagation()}
+        >
+          {part}
+        </a>
+      );
+    }
+
+    return <span key={`${part}-${index}`}>{part}</span>;
+  });
 }
 
 function Conversation() {
@@ -202,8 +235,8 @@ function Conversation() {
                       ${msg.offerAmount?.toLocaleString()}
                     </p>
                     {msg.text && (
-                      <p style={{ fontSize: "0.85rem", color: "var(--muted-foreground)", margin: 0 }}>
-                        {msg.text}
+                      <p style={{ fontSize: "0.85rem", color: "var(--muted-foreground)", margin: 0, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+                        {renderMessageText(msg.text)}
                       </p>
                     )}
                   </div>
@@ -258,8 +291,8 @@ function Conversation() {
                   border: isYou ? "none" : "0.5px solid var(--border)",
                   color: isYou ? "#fff" : "var(--foreground)",
                 }}>
-                  <p style={{ fontSize: "0.875rem", margin: 0, lineHeight: 1.5 }}>
-                    {msg.text}
+                  <p style={{ fontSize: "0.875rem", margin: 0, lineHeight: 1.5, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+                    {renderMessageText(msg.text)}
                   </p>
                 </div>
 

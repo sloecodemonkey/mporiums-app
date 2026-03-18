@@ -97,6 +97,8 @@ const SECTIONS = [
   { id: "contact",          label: "Contact Support",     icon: "💬" },
 ];
 
+const FEE_HEADERS = ["Fee type", "Standard Seller", "Preferred Seller", "Max"];
+
 function HelpCenter() {
 
   const [activeSection, setActiveSection] = useState("buyer-protection");
@@ -340,10 +342,10 @@ function HelpCenter() {
               {/* Fee table */}
               <h3 style={{ fontWeight: 600, marginBottom: "0.75rem" }}>Selling fee structure</h3>
               <div className="help-table-wrap" style={{ ...cardStyle, padding: 0, marginBottom: "1.5rem" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
+                <table className="help-fee-table" style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
                   <thead>
                     <tr style={{ background: "var(--muted)" }}>
-                      {["Fee type", "Standard Seller", "Preferred Seller", "Max"].map((h) => (
+                      {FEE_HEADERS.map((h) => (
                         <th key={h} style={{ padding: "0.75rem 1rem", textAlign: "left", fontWeight: 600, borderBottom: "0.5px solid var(--border)" }}>
                           {h}
                         </th>
@@ -358,7 +360,7 @@ function HelpCenter() {
                     ].map((row, i) => (
                       <tr key={i} style={{ borderBottom: i < 2 ? "0.5px solid var(--border)" : "none" }}>
                         {row.map((cell, j) => (
-                          <td key={j} style={{ padding: "0.75rem 1rem", color: j === 0 ? "var(--foreground)" : "var(--muted-foreground)" }}>
+                          <td key={j} data-label={FEE_HEADERS[j]} style={{ padding: "0.75rem 1rem", color: j === 0 ? "var(--foreground)" : "var(--muted-foreground)" }}>
                             {cell}
                           </td>
                         ))}
