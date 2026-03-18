@@ -172,7 +172,6 @@ function HelpCenter() {
               background: "var(--card)",
               border: "0.5px solid var(--border)",
               borderRadius: "var(--radius)",
-              overflow: "hidden",
             }}>
               {SECTIONS.map((section, i) => (
                 <button
