@@ -33,17 +33,14 @@ function ProductDetail() {
   // ----------------------------------------------------------
   // STATE
   // ----------------------------------------------------------
-                <img src="/icons/message-square.svg" alt="Message" style={{ width: "2rem", height: "2rem" }} />
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const [offerModalOpen, setOfferModalOpen] = useState(false);
-
-                <img src="/icons/heart.svg" alt="Save" style={{ width: "2rem", height: "2rem" }} />
   const [offerAmount, setOfferAmount] = useState("");
   const [offerMessage, setOfferMessage] = useState("");
 
   // Added to cart confirmation
-                <img src="/icons/share-2.svg" alt="Share" style={{ width: "2rem", height: "2rem" }} />
+  const [addedToCart, setAddedToCart] = useState(false);
 
   // ----------------------------------------------------------
   // HANDLE PRODUCT NOT FOUND
