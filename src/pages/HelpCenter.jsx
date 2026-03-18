@@ -19,7 +19,7 @@
 //   - Contact support button at the bottom
 // ============================================================
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // ── Fee calculator — same logic as Sell.jsx ─────────────────
@@ -152,7 +152,7 @@ function HelpCenter() {
       <div className="container">
 
         {/* ── PAGE HEADER ── */}
-        <div style={{ textAlign: "center", marginBottom: "3rem", paddingTop: "2rem" }}>
+        <div className="help-header" style={{ textAlign: "center", marginBottom: "3rem", paddingTop: "2rem" }}>
           <h1 className="page-title" style={{ marginBottom: "0.5rem" }}>
             Help Center
           </h1>
@@ -161,14 +161,14 @@ function HelpCenter() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: "3rem", alignItems: "start" }}>
+        <div className="help-layout">
 
           {/* ── SIDEBAR NAVIGATION ── */}
-          <aside style={{
+          <aside className="help-sidebar" style={{
             position: "sticky",
             top: "80px",
           }}>
-            <div style={{
+            <div className="help-sidebar-card" style={{
               background: "var(--card)",
               border: "0.5px solid var(--border)",
               borderRadius: "var(--radius)",
@@ -204,7 +204,7 @@ function HelpCenter() {
           </aside>
 
           {/* ── MAIN CONTENT ── */}
-          <div>
+          <div className="help-content">
 
             {/* ════════════════════════════════════════════════
                 SECTION 1 — BUYER PROTECTION
@@ -293,7 +293,7 @@ function HelpCenter() {
 
               {/* Shipping options */}
               <h3 style={{ fontWeight: 600, marginBottom: "0.75rem" }}>Shipping options</h3>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.5rem" }}>
+              <div className="help-card-grid" style={{ marginBottom: "1.5rem" }}>
                 {[
                   { title: "Free shipping", desc: "Orders over $500 automatically qualify for free shipping. Look for the Free Shipping badge on qualifying listings.", icon: "🎁" },
                   { title: "Flat rate shipping", desc: "Orders under $500 have a flat rate of $14.99. The seller packs and ships within 1–3 business days.", icon: "📮" },
@@ -340,7 +340,7 @@ function HelpCenter() {
 
               {/* Fee table */}
               <h3 style={{ fontWeight: 600, marginBottom: "0.75rem" }}>Selling fee structure</h3>
-              <div style={{ ...cardStyle, padding: 0, overflow: "hidden", marginBottom: "1.5rem" }}>
+              <div className="help-table-wrap" style={{ ...cardStyle, padding: 0, marginBottom: "1.5rem" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
                   <thead>
                     <tr style={{ background: "var(--muted)" }}>
@@ -380,9 +380,9 @@ function HelpCenter() {
                   Enter a price to see your estimated payout.
                 </p>
 
-                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                <div className="help-fee-controls" style={{ marginBottom: "1rem" }}>
                   {/* Price input */}
-                  <div style={{ flex: 1, minWidth: "150px" }}>
+                  <div className="help-field">
                     <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, marginBottom: "0.35rem" }}>
                       Listing price ($)
                     </label>
@@ -399,7 +399,7 @@ function HelpCenter() {
                   </div>
 
                   {/* Seller type */}
-                  <div style={{ flex: 1, minWidth: "150px" }}>
+                  <div className="help-field">
                     <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, marginBottom: "0.35rem" }}>
                       Seller type
                     </label>
@@ -476,7 +476,7 @@ function HelpCenter() {
               {/* Return policy */}
               <h3 style={{ fontWeight: 600, marginBottom: "0.75rem" }}>Return policy</h3>
               <div style={cardStyle}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="help-policy-grid">
                   {[
                     { label: "Return window", value: "3 days from delivery" },
                     { label: "Condition required", value: "Original condition, unmodified" },
@@ -527,7 +527,7 @@ function HelpCenter() {
               <h2 style={headingStyle}>❓ Frequently Asked Questions</h2>
 
               {/* Search */}
-              <div style={{ position: "relative", marginBottom: "1.5rem" }}>
+              <div className="help-search" style={{ position: "relative", marginBottom: "1.5rem" }}>
                 <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.4 }} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                 </svg>
@@ -558,8 +558,8 @@ function HelpCenter() {
                       }}
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
-                        <p style={{ fontWeight: 600, fontSize: "0.875rem", margin: 0 }}>
+                      <div className="help-faq-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
+                        <p className="help-faq-question" style={{ fontWeight: 600, fontSize: "0.875rem", margin: 0 }}>
                           {item.q}
                         </p>
                         <span style={{
@@ -592,7 +592,7 @@ function HelpCenter() {
                 Can't find what you're looking for? Our team is here to help.
               </p>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "2rem" }}>
+              <div className="help-contact-grid" style={{ marginBottom: "2rem" }}>
                 {[
                   { title: "Messaging", desc: "Message a seller directly through any product listing or your inbox.", icon: "💬", action: "Go to Inbox", link: "/messages" },
                   { title: "Help articles", desc: "Browse our full library of guides and how-to articles.", icon: "📖", action: "Browse articles", link: "/help" },

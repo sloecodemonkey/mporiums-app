@@ -651,6 +651,49 @@ img { max-width: 100%; height: auto; display: block; }
 .seller-location { text-align: right; font-size: 0.875rem; color: var(--muted-foreground); white-space: nowrap; min-width: max-content; }
 .seller-meta { display: flex; gap: 0.5rem; font-size: 0.75rem; color: var(--muted-foreground); }
 
+/* Help Center */
+.help-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+.help-sidebar {
+  position: sticky;
+  top: 80px;
+}
+.help-content {
+  min-width: 0;
+}
+.help-card-grid,
+.help-policy-grid,
+.help-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.help-fee-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.help-field {
+  flex: 1 1 150px;
+  min-width: 150px;
+}
+.help-table-wrap {
+  overflow-x: auto;
+}
+.help-table-wrap table {
+  min-width: 540px;
+}
+.help-faq-header {
+  min-width: 0;
+}
+.help-faq-question {
+  min-width: 0;
+}
+
 /* =============================================
    CART PAGE
    ============================================= */
@@ -1067,6 +1110,52 @@ img { max-width: 100%; height: auto; display: block; }
     min-width: 0;
   }
   .seller-location { min-width: 0; font-size: 0.8rem; }
+
+  /* Help Center */
+  .help-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .help-header {
+    margin-bottom: 2rem !important;
+    padding-top: 1rem !important;
+  }
+  .help-sidebar {
+    position: static !important;
+    top: auto !important;
+  }
+  .help-sidebar-card {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 1fr);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .help-sidebar-card button {
+    min-height: 52px;
+    white-space: nowrap;
+  }
+  .help-card-grid,
+  .help-policy-grid,
+  .help-contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .help-fee-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .help-field {
+    min-width: 0;
+  }
+  .help-faq-header {
+    align-items: flex-start !important;
+  }
+  .help-faq-question {
+    padding-top: 0.05rem;
+  }
+  .help-search input {
+    width: 100%;
+  }
   
   /* Listing cards - better spacing on mobile */
   .listing-card { 
@@ -1144,6 +1233,16 @@ img { max-width: 100%; height: auto; display: block; }
   
   /* Search */
   .search-bar { max-width: 22rem; margin: 0 1rem; }
+
+  /* Help Center */
+  .help-layout {
+    gap: 2rem;
+  }
+  .help-card-grid,
+  .help-policy-grid,
+  .help-contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ── LARGE DEVICES (769px+) ── */
