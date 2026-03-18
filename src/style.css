@@ -510,7 +510,7 @@ img { max-width: 100%; height: auto; display: block; }
 .shop-grid-wrapper { flex: 1; min-width: 0; }
 
 .filter-section { margin-bottom: 2.5rem; }
-.filter-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 2rem; }
+.filter-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: .75rem; }
 .filter-options { display: flex; flex-direction: column; gap: 0.25rem; }
 .filter-btn {
   display: block; 
@@ -645,7 +645,7 @@ img { max-width: 100%; height: auto; display: block; }
   border-radius: var(--radius); border: 1px solid var(--border);
   background: var(--card); padding: 1rem; margin-top: 0.75rem;
 }
-.seller-info { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; margin-top: 0.75rem; align-items: center; min-width: 0; }
+.seller-info { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.75rem; margin-top: 0.75rem; padding-top: 1rem; center; min-width: 0; }
 .seller-name img { display: inline-block; vertical-align: bottom; margin-right: 0.5rem; margin-top: .25rem; }
 .seller-avatar { width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: hsla(0,78%,50%,0.1); 
   font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; color: var(--primary); }
