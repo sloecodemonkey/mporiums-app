@@ -348,7 +348,7 @@ img { max-width: 100%; height: auto; display: block; }
 .category-count { margin-top: 0.25rem; font-size: 0.75rem; color: var(--muted-foreground); }
 
 /* Listing Cards */
-.listing-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.listing-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
 .listing-card { 
   text-decoration: none; 
   cursor: pointer; 
@@ -966,7 +966,7 @@ img { max-width: 100%; height: auto; display: block; }
   .icon-btn { min-width: 44px; min-height: 44px; }
   
   /* Grids & Layouts */
-  .listing-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .listing-grid { grid-template-columns: 1fr; gap: 1rem; }
   .category-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
   .steps-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .form-grid-2 { grid-template-columns: 1fr; gap: 0.75rem; }
@@ -1114,7 +1114,7 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-title { font-size: 2.75rem; }
   
   /* Grids */
-  .listing-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .listing-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
   .category-grid { grid-template-columns: repeat(3, 1fr); }
   .steps-grid { grid-template-columns: repeat(2, 1fr); }
   .form-grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -1150,7 +1150,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* ── LARGE DEVICES (769px+) ── */
 @media (min-width: 769px) {
   /* Desktop-first, minimal changes needed */
-  .listing-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .listing-grid { grid-template-columns: repeat(3, 1fr); }
   .category-grid { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
   .steps-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 }
