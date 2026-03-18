@@ -510,7 +510,7 @@ img { max-width: 100%; height: auto; display: block; }
 .shop-grid-wrapper { flex: 1; min-width: 0; }
 
 .filter-section { margin-bottom: 2.5rem; }
-.filter-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.75rem; }
+.filter-title { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 1rem; }
 .filter-options { display: flex; flex-direction: column; gap: 0.25rem; }
 .filter-btn {
   display: block; 
