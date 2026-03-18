@@ -694,6 +694,18 @@ img { max-width: 100%; height: auto; display: block; }
   min-width: 0;
 }
 
+@media (max-width: 1024px) {
+  .help-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .help-sidebar {
+    position: static;
+    top: auto;
+  }
+}
+
 /* =============================================
    CART PAGE
    ============================================= */
