@@ -149,9 +149,8 @@ function PriceGuide() {
           </p>
 
           {/* Search */}
-          <div style={{ position: "relative", maxWidth: "480px", margin: "0 auto" }}>
-            <svg style={{ position: "absolute", left: "0.9rem", top: "50%", transform: "translateY(-50%)", opacity: 0.4 }}
-              xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="search-bar" style={{ maxWidth: "480px", margin: "0 auto" }}>
+            <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
             <input
@@ -159,7 +158,6 @@ function PriceGuide() {
               placeholder="Search instruments, brands..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ paddingLeft: "2.5rem", fontSize: "0.95rem" }}
             />
           </div>
         </div>
