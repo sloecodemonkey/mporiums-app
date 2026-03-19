@@ -9,7 +9,7 @@ export function PaymentSuccess() {
   return (
     <main className="page-main center-content" style={{ paddingTop: "64px" }}>
       <div className="success-content animate-fade-in">
-        <div className="success-icon">✅</div>
+        <div className="success-icon"><img src="/icons/check-circle.svg" alt="Success" style={{ width: "2.5rem", height: "2.5rem" }} /></div>
         <h1 className="page-title">Payment Successful!</h1>
         <p className="text-muted" style={{ maxWidth: "28rem" }}>
           Thank you for your purchase. You'll receive a confirmation email
@@ -17,7 +17,10 @@ export function PaymentSuccess() {
         </p>
         <div className="success-actions">
           {/*  */}
-          <Link to="/shop" className="btn btn-primary">🛍️ Continue Shopping</Link>
+          <Link to="/shop" className="btn btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+            <img src="/icons/shopping-bag.svg" alt="Shop" style={{ width: "0.9rem", height: "0.9rem" }} />
+            Continue Shopping
+          </Link>
           <Link to="/" className="btn btn-outline">Back to Home</Link>
         </div>
       </div>

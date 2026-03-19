@@ -89,12 +89,12 @@ const FAQ = [
 
 // ── Sections for sidebar navigation ─────────────────────────
 const SECTIONS = [
-  { id: "buyer-protection", label: "Buyer Protection",    icon: "🛡️" },
-  { id: "shipping",         label: "Shipping",            icon: "📦" },
-  { id: "fees",             label: "Fees & Pricing",      icon: "💰" },
-  { id: "disputes",         label: "Disputes & Returns",  icon: "⚖️" },
-  { id: "faq",              label: "FAQ",                 icon: "❓" },
-  { id: "contact",          label: "Contact Support",     icon: "💬" },
+  { id: "buyer-protection", label: "Buyer Protection",   icon: "/icons/shield.svg" },
+  { id: "shipping",         label: "Shipping",           icon: "/icons/package.svg" },
+  { id: "fees",             label: "Fees & Pricing",     icon: "/icons/dollar-sign.svg" },
+  { id: "disputes",         label: "Disputes & Returns", icon: "/icons/info.svg" },
+  { id: "faq",              label: "FAQ",                icon: "/icons/info.svg" },
+  { id: "contact",          label: "Contact Support",    icon: "/icons/message-square.svg" },
 ];
 
 const FEE_HEADERS = ["Fee type", "Standard Seller", "Preferred Seller", "Max"];
@@ -197,7 +197,7 @@ function HelpCenter() {
                     transition: "all 0.15s",
                   }}
                 >
-                  <span style={{ fontSize: "1rem" }}>{section.icon}</span>
+                  <img src={section.icon} alt="" aria-hidden="true" style={{ width: "1rem", height: "1rem", flexShrink: 0 }} />
                   {section.label}
                 </button>
               ))}
@@ -211,7 +211,10 @@ function HelpCenter() {
                 SECTION 1 — BUYER PROTECTION
                 ════════════════════════════════════════════════ */}
             <section id="buyer-protection" style={sectionStyle}>
-              <h2 style={headingStyle}>🛡️ Buyer Protection</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/shield.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Buyer Protection
+              </h2>
               <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
                 Every purchase on M.Poriums is covered by our Buyer Protection policy. Shop with confidence knowing we have your back.
               </p>
@@ -221,27 +224,27 @@ function HelpCenter() {
                 {
                   title: "Item not received",
                   desc: "If your item doesn't arrive within 7 days of the estimated delivery date, contact us and we'll investigate. If the item can't be located, you'll receive a full refund.",
-                  icon: "📭",
+                  icon: "/icons/package.svg",
                 },
                 {
                   title: "Item not as described",
                   desc: "If the item is significantly different from the listing description — wrong condition, missing parts, or undisclosed damage — you're entitled to a full refund. Contact us within 3 days of delivery.",
-                  icon: "🔍",
+                  icon: "/icons/search.svg",
                 },
                 {
                   title: "Secure payments",
                   desc: "All payments are processed through Stripe. Your card details are never stored on our servers. We use bank-level encryption on every transaction.",
-                  icon: "🔒",
+                  icon: "/icons/shield-check.svg",
                 },
                 {
                   title: "Verified sellers",
                   desc: "Preferred Sellers have been verified by M.Poriums and have a proven track record of successful transactions. Look for the shield badge on seller profiles.",
-                  icon: "✅",
+                  icon: "/icons/check-circle.svg",
                 },
               ].map((item) => (
                 <div key={item.title} style={cardStyle}>
                   <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "1.5rem", flexShrink: 0 }}>{item.icon}</span>
+                    <img src={item.icon} alt="" aria-hidden="true" style={{ width: "1.5rem", height: "1.5rem", flexShrink: 0 }} />
                     <div>
                       <h3 style={{ fontWeight: 600, fontSize: "0.95rem", marginBottom: "0.3rem" }}>
                         {item.title}
@@ -287,7 +290,10 @@ function HelpCenter() {
                 SECTION 2 — SHIPPING
                 ════════════════════════════════════════════════ */}
             <section id="shipping" style={sectionStyle}>
-              <h2 style={headingStyle}>📦 Shipping</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/package.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Shipping
+              </h2>
               <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
                 Shipping on M.Poriums is handled directly between buyers and sellers. Here's how it works.
               </p>
@@ -296,12 +302,12 @@ function HelpCenter() {
               <h3 style={{ fontWeight: 600, marginBottom: "0.75rem" }}>Shipping options</h3>
               <div className="help-card-grid" style={{ marginBottom: "1.5rem" }}>
                 {[
-                  { title: "Free shipping", desc: "Orders over $500 automatically qualify for free shipping. Look for the Free Shipping badge on qualifying listings.", icon: "🎁" },
-                  { title: "Flat rate shipping", desc: "Orders under $500 have a flat rate of $14.99. The seller packs and ships within 1–3 business days.", icon: "📮" },
-                  { title: "Seller-set rates", desc: "Some sellers set custom shipping rates, especially for large or heavy items like studio monitors and pianos.", icon: "⚖️" },
+                  { title: "Free shipping", desc: "Orders over $500 automatically qualify for free shipping. Look for the Free Shipping badge on qualifying listings.", icon: "/icons/truck.svg" },
+                  { title: "Flat rate shipping", desc: "Orders under $500 have a flat rate of $14.99. The seller packs and ships within 1–3 business days.", icon: "/icons/package.svg" },
+                  { title: "Seller-set rates", desc: "Some sellers set custom shipping rates, especially for large or heavy items like studio monitors and pianos.", icon: "/icons/sliders-horizontal.svg" },
                 ].map((item) => (
                   <div key={item.title} style={cardStyle}>
-                    <div style={{ fontSize: "1.25rem", marginBottom: "0.4rem" }}>{item.icon}</div>
+                    <div style={{ marginBottom: "0.4rem" }}><img src={item.icon} alt="" aria-hidden="true" style={{ width: "1.25rem", height: "1.25rem" }} /></div>
                     <h4 style={{ fontWeight: 600, fontSize: "0.875rem", marginBottom: "0.25rem" }}>{item.title}</h4>
                     <p className="text-muted text-sm" style={{ lineHeight: 1.5 }}>{item.desc}</p>
                   </div>
@@ -323,7 +329,7 @@ function HelpCenter() {
                   "Take photos of the packed item before sealing and shipping",
                 ].map((tip, i) => (
                   <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.4rem" }}>
-                    <span style={{ color: "var(--primary)", fontWeight: 700, flexShrink: 0 }}>✓</span>
+                    <img src="/icons/check.svg" alt="" aria-hidden="true" style={{ width: "0.8rem", height: "0.8rem", marginTop: "0.2rem", flexShrink: 0 }} />
                     <p style={{ fontSize: "0.875rem", margin: 0 }}>{tip}</p>
                   </div>
                 ))}
@@ -334,7 +340,10 @@ function HelpCenter() {
                 SECTION 3 — FEES
                 ════════════════════════════════════════════════ */}
             <section id="fees" style={sectionStyle}>
-              <h2 style={headingStyle}>💰 Fees & Pricing</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/dollar-sign.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Fees & Pricing
+              </h2>
               <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
                 M.Poriums charges sellers a fee on each completed sale. Listing is always free.
               </p>
@@ -469,7 +478,10 @@ function HelpCenter() {
                 SECTION 4 — DISPUTES & RETURNS
                 ════════════════════════════════════════════════ */}
             <section id="disputes" style={sectionStyle}>
-              <h2 style={headingStyle}>⚖️ Disputes & Returns</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/info.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Disputes & Returns
+              </h2>
               <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
                 We aim to resolve all disputes fairly and quickly for both buyers and sellers.
               </p>
@@ -525,7 +537,10 @@ function HelpCenter() {
                 SECTION 5 — FAQ
                 ════════════════════════════════════════════════ */}
             <section id="faq" style={sectionStyle}>
-              <h2 style={headingStyle}>❓ Frequently Asked Questions</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/info.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Frequently Asked Questions
+              </h2>
 
               {/* Search */}
               <div className="help-search" style={{ position: "relative", marginBottom: "1.5rem" }}>
@@ -588,20 +603,23 @@ function HelpCenter() {
                 SECTION 6 — CONTACT SUPPORT
                 ════════════════════════════════════════════════ */}
             <section id="contact" style={sectionStyle}>
-              <h2 style={headingStyle}>💬 Contact Support</h2>
+              <h2 style={headingStyle}>
+                <img src="/icons/message-square.svg" alt="" aria-hidden="true" style={{ width: "1.2rem", height: "1.2rem" }} />
+                Contact Support
+              </h2>
               <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
                 Can't find what you're looking for? Our team is here to help.
               </p>
 
               <div className="help-contact-grid" style={{ marginBottom: "2rem" }}>
                 {[
-                  { title: "Messaging", desc: "Message a seller directly through any product listing or your inbox.", icon: "💬", action: "Go to Inbox", link: "/messages" },
-                  { title: "Help articles", desc: "Browse our full library of guides and how-to articles.", icon: "📖", action: "Browse articles", link: "/help" },
-                  { title: "Report a problem", desc: "Have an issue with an order? Open a dispute from your order history.", icon: "🚨", action: "Order history", link: "/orders" },
-                  { title: "Email support", desc: "Reach our support team at support@mporiums.com. We respond within 24 hours.", icon: "📧", action: "Send email", link: "mailto:support@mporiums.com" },
+                  { title: "Messaging", desc: "Message a seller directly through any product listing or your inbox.", icon: "/icons/message-square.svg", action: "Go to Inbox", link: "/messages" },
+                  { title: "Help articles", desc: "Browse our full library of guides and how-to articles.", icon: "/icons/info.svg", action: "Browse articles", link: "/help" },
+                  { title: "Report a problem", desc: "Have an issue with an order? Open a dispute from your order history.", icon: "/icons/shield.svg", action: "Order history", link: "/orders" },
+                  { title: "Email support", desc: "Reach our support team at support@mporiums.com. We respond within 24 hours.", icon: "/icons/message-square.svg", action: "Send email", link: "mailto:support@mporiums.com" },
                 ].map((item) => (
                   <div key={item.title} style={cardStyle}>
-                    <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{item.icon}</div>
+                    <div style={{ marginBottom: "0.5rem" }}><img src={item.icon} alt="" aria-hidden="true" style={{ width: "1.5rem", height: "1.5rem" }} /></div>
                     <h4 style={{ fontWeight: 600, fontSize: "0.875rem", marginBottom: "0.3rem" }}>{item.title}</h4>
                     <p className="text-muted text-sm" style={{ lineHeight: 1.5, marginBottom: "0.75rem" }}>{item.desc}</p>
                     {item.link.startsWith("mailto") ? (

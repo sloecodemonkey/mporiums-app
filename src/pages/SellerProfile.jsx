@@ -242,7 +242,8 @@ function SellerProfile() {
                     <div key={star} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                       {/* Star label */}
                       <span style={{ fontSize: "0.78rem", color: "var(--muted-foreground)", minWidth: "32px", textAlign: "right" }}>
-                        {star} ★
+                        {star}
+                        <img src="/icons/star.svg" alt="star" style={{ width: "0.7rem", height: "0.7rem", marginLeft: "0.2rem", verticalAlign: "-1px" }} />
                       </span>
                       {/* Progress bar */}
                       <div style={{
@@ -276,8 +277,10 @@ function SellerProfile() {
                 <button
                   className="btn btn-outline"
                   onClick={() => setShowReviewForm(true)}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
                 >
-                  ✏️ Write a Review
+                  <img src="/icons/star.svg" alt="Review" style={{ width: "0.85rem", height: "0.85rem" }} />
+                  Write a Review
                 </button>
               ) : (
                 <ReviewForm
@@ -313,7 +316,7 @@ function SellerProfile() {
             {/* ── REVIEW CARDS ── */}
             {totalReviews === 0 ? (
               <div className="empty-state" style={{ padding: "3rem 0" }}>
-                <div className="empty-icon">⭐</div>
+                <div className="empty-icon"><img src="/icons/star.svg" alt="No reviews" style={{ width: "3.125rem", height: "3.125rem" }} /></div>
                 <p className="empty-title">No reviews yet</p>
                 <p className="text-muted">
                   Be the first to leave a review for {sellerName}.

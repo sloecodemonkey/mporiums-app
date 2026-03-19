@@ -104,7 +104,9 @@ function EditListing() {
     return (
       <main className="page-main center-content" style={{ paddingTop: "64px" }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✅</div>
+          <div style={{ marginBottom: "1rem" }}>
+            <img src="/icons/check-circle.svg" alt="Saved" style={{ width: "3rem", height: "3rem" }} />
+          </div>
           <h2 style={{ fontFamily: "var(--font-display)", marginBottom: "0.5rem" }}>Listing Updated!</h2>
           <p className="text-muted">Redirecting to your listings...</p>
         </div>
@@ -144,7 +146,9 @@ function EditListing() {
                   {images.map((src, i) => (
                     <div key={i} className="upload-thumb">
                       <img src={src} alt={`Photo ${i + 1}`} />
-                      <button className="remove-thumb" onClick={() => removeImage(i)}>✕</button>
+                      <button className="remove-thumb" onClick={() => removeImage(i)} aria-label="Remove image">
+                        <img src="/icons/x.svg" alt="Remove" style={{ width: "0.7rem", height: "0.7rem" }} />
+                      </button>
                       {i === 0 && (
                         <span style={{
                           position: "absolute", bottom: "4px", left: "4px",
