@@ -169,7 +169,7 @@ function Wishlist() {
                         />
                       ) : (
                         <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem" }}>
-                          <img src="/icons/camera.svg" alt="No image" style={{ width: "1.1rem", height: "1.1rem", opacity: 0.6 }} />
+                          📷
                         </div>
                       )}
                     </div>
@@ -229,12 +229,7 @@ function Wishlist() {
                       style={{ minWidth: "110px" }}
                       onClick={() => handleAddToCart(product)}
                     >
-                      {addedIds.includes(product.id) ? (
-                        <>
-                          <img src="/icons/check.svg" alt="Added" style={{ width: "1rem", height: "1rem", marginRight: "0.25rem", verticalAlign: "-1px" }} />
-                          Added!
-                        </>
-                      ) : "Add to Cart"}
+                      {addedIds.includes(product.id) ? "✓ Added!" : "Add to Cart"}
                     </button>
 
                     {/* Remove from wishlist */}

@@ -109,9 +109,7 @@ function MyListings() {
         {/* EMPTY STATE */}
         {myListings.length === 0 && (
           <div className="empty-state" style={{ padding: "4rem 0" }}>
-            <div style={{ marginBottom: "1rem" }}>
-              <img src="/icons/package.svg" alt="No listings" style={{ width: "3rem", height: "3rem", opacity: 0.8 }} />
-            </div>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📦</div>
             <h2 className="empty-title">No listings yet</h2>
             <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
               Start selling by creating your first listing.
@@ -278,11 +276,10 @@ function MyListings() {
                       <>
                         <button
                           className="btn btn-outline btn-sm"
-                          style={{ minWidth: "90px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.35rem" }}
+                          style={{ minWidth: "90px" }}
                           onClick={() => handleEditStart(product)}
                         >
-                          <img src="/icons/settings.svg" alt="Edit" style={{ width: "0.8rem", height: "0.8rem" }} />
-                          Edit
+                          ✏️ Edit
                         </button>
                         <button
                           className="btn btn-outline btn-sm"
@@ -290,15 +287,10 @@ function MyListings() {
                             minWidth: "90px",
                             color: "var(--destructive)",
                             borderColor: "var(--destructive)",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "0.35rem",
                           }}
                           onClick={() => handleDeleteListing(product.id)}
                         >
-                          <img src="/icons/trash-2.svg" alt="Delete" style={{ width: "0.8rem", height: "0.8rem" }} />
-                          Delete
+                          🗑️ Delete
                         </button>
                       </>
                     )}

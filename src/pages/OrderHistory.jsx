@@ -86,10 +86,10 @@ const SEED_ORDERS = [
 
 // ── Status config ─────────────────────────────────────────────
 const STATUS_CONFIG = {
-  processing: { label: "Processing", color: "#633806", bg: "#FAEEDA", icon: "/icons/loader.svg", steps: 1 },
-  shipped:    { label: "Shipped",    color: "var(--primary)", bg: "var(--muted)", icon: "/icons/package.svg", steps: 2 },
-  delivered:  { label: "Delivered",  color: "#3B6D11", bg: "#EAF3DE", icon: "/icons/check-circle.svg", steps: 3 },
-  cancelled:  { label: "Cancelled",  color: "#A32D2D", bg: "#FCEBEB", icon: "/icons/x.svg", steps: 0 },
+  processing: { label: "Processing",  color: "#633806", bg: "#FAEEDA", icon: "⏳", steps: 1 },
+  shipped:    { label: "Shipped",     color: "var(--primary)", bg: "var(--muted)", icon: "📦", steps: 2 },
+  delivered:  { label: "Delivered",  color: "#3B6D11", bg: "#EAF3DE", icon: "✅", steps: 3 },
+  cancelled:  { label: "Cancelled",  color: "#A32D2D", bg: "#FCEBEB", icon: "❌", steps: 0 },
 };
 
 function formatDate(dateStr) {
@@ -148,9 +148,7 @@ function OrderHistory() {
         {/* ── EMPTY STATE ── */}
         {filtered.length === 0 && (
           <div className="empty-state" style={{ padding: "3rem 0" }}>
-            <div style={{ marginBottom: "1rem" }}>
-              <img src="/icons/package.svg" alt="No orders" style={{ width: "2.5rem", height: "2.5rem", opacity: 0.8 }} />
-            </div>
+            <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>📦</div>
             <h2 className="empty-title">No orders found</h2>
             <p className="text-muted" style={{ marginBottom: "1.5rem" }}>
               {filter === "all" ? "You haven't placed any orders yet." : `No ${filter} orders.`}
@@ -185,11 +183,9 @@ function OrderHistory() {
                         <span style={{
                           fontSize: "0.72rem", fontWeight: 600,
                           background: status.bg, color: status.color,
-                          display: "inline-flex", alignItems: "center", gap: "0.3rem",
                           padding: "2px 8px", borderRadius: "20px",
                         }}>
-                          <img src={status.icon} alt={status.label} style={{ width: "0.9rem", height: "0.9rem" }} />
-                          {status.label}
+                          {status.icon} {status.label}
                         </span>
                       </div>
                       <p className="text-muted text-xs">{formatDate(order.date)}</p>
@@ -238,9 +234,7 @@ function OrderHistory() {
                                     fontSize: "0.75rem", color: done ? "#fff" : "var(--muted-foreground)",
                                     fontWeight: 700, flexShrink: 0,
                                   }}>
-                                    {done ? (
-                                      <img src="/icons/check.svg" alt="Complete" style={{ width: "0.9rem", height: "0.9rem", filter: "brightness(0) invert(1)" }} />
-                                    ) : i + 1}
+                                    {done ? "✓" : i + 1}
                                   </div>
                                   {i < 2 && <div style={{ flex: 1, height: "2px", background: status.steps > i + 1 ? "var(--primary)" : "var(--border)" }} />}
                                 </div>
@@ -314,27 +308,22 @@ function OrderHistory() {
                           to={`/seller/${order.items[0].seller}`}
                           className="btn btn-primary btn-sm"
                           onClick={() => markReviewed(order.id)}
-                          style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
                         >
-                          <img src="/icons/star.svg" alt="Review" style={{ width: "1rem", height: "1rem" }} />
-                          Leave a Review
+                          ⭐ Leave a Review
                         </Link>
                       )}
                       {order.status === "delivered" && order.reviewLeft && (
                         <span style={{ fontSize: "0.8rem", color: "var(--muted-foreground)", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                          <img src="/icons/check-circle.svg" alt="Submitted" style={{ width: "1rem", height: "1rem" }} />
-                          Review submitted
+                          ✅ Review submitted
                         </span>
                       )}
                       {order.status !== "cancelled" && (
-                        <Link to="/help#disputes" className="btn btn-outline btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
-                          <img src="/icons/info.svg" alt="Report" style={{ width: "1rem", height: "1rem" }} />
-                          Report a Problem
+                        <Link to="/help#disputes" className="btn btn-outline btn-sm">
+                          🚨 Report a Problem
                         </Link>
                       )}
-                      <Link to={`/messages`} className="btn btn-outline btn-sm" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
-                        <img src="/icons/message-square.svg" alt="Message" style={{ width: "1rem", height: "1rem" }} />
-                        Message Seller
+                      <Link to={`/messages`} className="btn btn-outline btn-sm">
+                        💬 Message Seller
                       </Link>
                     </div>
                   </div>

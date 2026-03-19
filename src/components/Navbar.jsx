@@ -240,12 +240,12 @@ function Navbar() {
 
                   {/* Menu links */}
                   {[
-                    { to: "/account",      label: "My Account",    icon: "/icons/user.svg" },
-                    { to: "/my-listings",  label: "My Listings",   icon: "/icons/package.svg" },
-                    { to: "/dashboard",    label: "Dashboard",     icon: "/icons/sliders-horizontal.svg" },
-                    { to: "/orders",       label: "Order History", icon: "/icons/info.svg" },
-                    { to: "/wishlist",     label: "Saved Items",   icon: "/icons/heart.svg"  },
-                    { to: "/messages",     label: "Messages",      icon: "/icons/message-square.svg" },
+                    { to: "/account",      label: "My Account",    icon: "👤" },
+                    { to: "/my-listings",  label: "My Listings",   icon: "📦" },
+                    { to: "/dashboard",    label: "Dashboard",     icon: "📊" },
+                    { to: "/orders",       label: "Order History", icon: "🧾" },
+                    { to: "/wishlist",     label: "Saved Items",   icon: "♡"  },
+                    { to: "/messages",     label: "Messages",      icon: "💬" },
                   ].map((item) => (
                     <Link
                       key={item.to}
@@ -263,7 +263,7 @@ function Navbar() {
                       onMouseEnter={(e) => e.currentTarget.style.background = "var(--muted)"}
                       onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                     >
-                      <img src={item.icon} alt="" aria-hidden="true" style={{ width: "1.05rem", height: "1.05rem" }} />
+                      <span style={{ fontSize: "0.9rem" }}>{item.icon}</span>
                       {item.label}
                     </Link>
                   ))}
@@ -283,7 +283,7 @@ function Navbar() {
                     onMouseEnter={(e) => e.currentTarget.style.background = "var(--muted)"}
                     onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                   >
-                    <img src="/icons/log-out.svg" alt="" aria-hidden="true" style={{ width: "1.05rem", height: "1.05rem" }} />
+                    <span style={{ fontSize: "0.9rem" }}>🚪</span>
                     Sign Out
                   </button>
                 </div>

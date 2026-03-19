@@ -159,10 +159,7 @@ function Deals() {
         {/* ── DEAL OF THE DAY ── */}
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
-            <h2 className="section-title" style={{ margin: 0, display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
-              <img src="/icons/tag.svg" alt="Deal" style={{ width: "1rem", height: "1rem" }} />
-              Deal of the Day
-            </h2>
+            <h2 className="section-title" style={{ margin: 0 }}>🔥 Deal of the Day</h2>
             <CountdownTimer hours={dealOfDay.endsIn} label="Ends in:" />
           </div>
 

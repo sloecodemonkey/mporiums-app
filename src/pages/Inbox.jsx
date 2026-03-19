@@ -110,9 +110,7 @@ function Inbox() {
         {/* ── EMPTY STATE ── */}
         {filtered.length === 0 && (
           <div className="empty-state" style={{ padding: "3rem 0" }}>
-            <div style={{ marginBottom: "1rem" }}>
-              <img src="/icons/message-square.svg" alt="No messages" style={{ width: "2.8rem", height: "2.8rem", opacity: 0.8 }} />
-            </div>
+            <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>💬</div>
             <h2 className="empty-title">
               {filter === "unread" ? "No unread messages" : "No messages yet"}
             </h2>
@@ -177,7 +175,7 @@ function Inbox() {
                     />
                   ) : (
                     <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <img src="/icons/camera.svg" alt="No product image" style={{ width: "1.1rem", height: "1.1rem", opacity: 0.6 }} />
+                      📷
                     </div>
                   )}
                 </div>

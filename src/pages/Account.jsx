@@ -209,7 +209,7 @@ function Account() {
             </h2>
             <hr className="separator" />
             <div className="info-box">
-              <img src="/icons/credit-card.svg" alt="Payment" style={{ width: "1.15rem", height: "1.15rem", flexShrink: 0 }} />
+              <span>💳</span>
               <div>
                 <p className="info-box-title">Payments handled by Stripe</p>
                 <p className="text-xs text-muted">
@@ -222,15 +222,13 @@ function Account() {
 
           {/* SAVE BUTTON  */}
           <button type="submit" className="btn btn-primary btn-lg">
-            <img src="/icons/save.svg" alt="Save" style={{ width: "1.1rem", height: "1.1rem", marginRight: "0.4rem", verticalAlign: "-2px" }} />
-            Save Changes
+            💾 Save Changes
           </button>
 
           {/* {saved && (...)} only shows for 3 seconds after saving */}
           {saved && (
-            <p style={{ color: "var(--accent)", marginTop: "0.75rem", fontWeight: 500, display: "flex", alignItems: "center", gap: "0.35rem" }}>
-              <img src="/icons/check.svg" alt="Saved" style={{ width: "1rem", height: "1rem" }} />
-              Profile saved successfully!
+            <p style={{ color: "var(--accent)", marginTop: "0.75rem", fontWeight: 500 }}>
+              ✓ Profile saved successfully!
             </p>
           )}
         </form>
@@ -251,7 +249,7 @@ function Account() {
 
             {/* Empty state — shown until real order data is connected */}
             <div className="empty-state">
-              <div className="empty-icon"><img src="/icons/shopping-bag.svg" alt="No purchases" style={{ width: "3.125rem", height: "3.125rem" }} /></div>
+              <div className="empty-icon">🛍️</div>
               <p className="empty-title">No purchases yet</p>
               <p className="text-muted text-xs">
                 Your order history will appear here after your first purchase.

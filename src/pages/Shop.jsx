@@ -226,10 +226,8 @@ function Shop() {
               <button
                 className="btn btn-outline btn-sm btn-full"
                 onClick={clearFilters}
-                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.35rem" }}
               >
-                <img src="/icons/x.svg" alt="Clear" style={{ width: "1rem", height: "1rem" }} />
-                Clear Filters
+                ✕ Clear Filters
               </button>
             )}
           </aside>

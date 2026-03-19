@@ -141,7 +141,7 @@ function Auth() {
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
                     ) : (
-                      <img src="/icons/user.svg" alt="Profile" style={{ width: "2.4rem", height: "2.4rem", opacity: 0.65 }} />
+                      "👤"
                     )}
                   </div>
 

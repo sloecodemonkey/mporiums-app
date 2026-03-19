@@ -43,7 +43,7 @@ function Cart() {
              */}
         {cart.length === 0 && (
           <div className="empty-state">
-            <div className="empty-icon"><img src="/icons/shopping-bag.svg" alt="Empty cart" style={{ width: "3.125rem", height: "3.125rem" }} /></div>
+            <div className="empty-icon">🛍️</div>
             <h2 className="empty-title">Your cart is empty</h2>
             <p className="text-muted">
               Discover amazing deals on music gear, instruments, and audio equipment.
@@ -123,7 +123,7 @@ function Cart() {
                           onClick={() => removeFromCart(item.id)}
                           aria-label="Remove item"
                         >
-                          <img src="/icons/trash-2.svg" alt="Remove" style={{ width: "1.1rem", height: "1.1rem" }} />
+                          🗑️
                         </button>
 
                         {/* Line total: price × quantity
@@ -172,8 +172,7 @@ function Cart() {
                     */}
                 {shipping === 0 && (
                   <p className="free-shipping-note">
-                    <img src="/icons/truck.svg" alt="Shipping" style={{ width: "1.05rem", height: "1.05rem", marginRight: "0.3rem", verticalAlign: "-2px" }} />
-                    You qualify for free shipping!
+                    🎉 You qualify for free shipping!
                   </p>
                 )}
 
@@ -188,8 +187,7 @@ function Cart() {
                 </Link>
 
                 <div className="secure-note">
-                  <img src="/icons/shield.svg" alt="Secure" style={{ width: "1.05rem", height: "1.05rem", marginRight: "0.3rem", verticalAlign: "-2px" }} />
-                  Secure checkout · Buyer protection included
+                  🛡️ Secure checkout · Buyer protection included
                 </div>
               </div>
             </div>
