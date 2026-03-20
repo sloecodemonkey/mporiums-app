@@ -1071,6 +1071,7 @@ img { max-width: 100%; height: auto; display: block; }
   .product-thumb { width: 4rem; height: 4rem; min-width: 4rem; flex-shrink: 0; }
   .product-actions { flex-direction: column; gap: 0.5rem; width: 100%; }
   .product-actions .btn { width: auto; max-width: 155px; }
+  .product-actions .product-add-to-cart-btn { min-width: 170px; max-width: 100%; white-space: nowrap; }
   
   /* Cart Layout */
   .cart-layout { grid-template-columns: 1fr; gap: 1.5rem; }
