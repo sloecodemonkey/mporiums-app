@@ -1016,6 +1016,9 @@ img { max-width: 100%; height: auto; display: block; }
   .navbar-inner { height: 56px; gap: 0.5rem; }
   .navbar-left { gap: 0.75rem; }
   .navbar-right { gap: 0; }
+  .navbar-right .navbar-theme-btn,
+  .navbar-right .navbar-wishlist-btn,
+  .navbar-right .navbar-user-menu { display: none !important; }
   .logo img { height: 24px; }
   
   /* Typography */
