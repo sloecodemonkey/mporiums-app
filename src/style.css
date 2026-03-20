@@ -634,10 +634,15 @@ img { max-width: 100%; height: auto; display: block; }
 
 .product-actions { 
   display: flex; 
-  flex-wrap: wrap; 
+  flex-wrap: nowrap;
   gap: 0.75rem; 
   margin-top: 1.5rem;
   width: 100%;
+  overflow-x: auto;
+}
+.product-actions .btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 /* Seller Card */
