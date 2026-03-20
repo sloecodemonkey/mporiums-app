@@ -255,7 +255,7 @@ function ProductDetail() {
               {/* ADD TO CART
                    */}
               <button
-                className="btn btn-primary btn-sm"
+                className="btn btn-primary btn-sm btn-flex"
                 onClick={handleAddToCart}
               >
                 <img src="/icons/shopping-cart-white.svg" alt="Cart" style={{ width: "2rem", height: "2rem" }} />
@@ -278,7 +278,7 @@ function ProductDetail() {
                 Save
               </button>
 
-              <button className="btn btn-outline btn-sm btn-blue-hover product-share-btn">
+              <button className="btn btn-outline btn-sm btn-blue-hover">
                 <img src="/icons/share-2.svg" alt="Share" style={{ width: "2rem", height: "2rem" }} />
                 Share
               </button>
