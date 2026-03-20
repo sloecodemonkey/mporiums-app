@@ -642,8 +642,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .product-actions .btn {
   padding: 0.5rem 0.75rem;
-  font-size: 0.8125rem;
-  min-height: 36px;
+  font-size: 0.875rem;
+  min-height: 2rem;
+  flex: 1;
 }
 .product-actions .btn img {
   width: 1.125rem !important;
