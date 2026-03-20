@@ -643,7 +643,13 @@ img { max-width: 100%; height: auto; display: block; }
 .product-actions .btn {
   flex: 1 1 0;
   min-width: 120px;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.product-actions .btn img {
+  flex-shrink: 0;
 }
 
 /* Seller Card */
