@@ -258,9 +258,9 @@ function ProductDetail() {
                 className="btn btn-primary btn-sm btn-flex"
                 onClick={handleAddToCart}
               >
-                <img src="/icons/shopping-cart-white.svg" alt="Cart" style={{ width: "3rem", height: "3rem" }} />
+                <img src="/icons/shopping-cart-white.svg" alt="Cart" style={{ width: "2rem", height: "2rem" }} />
                 {/* Show "Added!" briefly after clicking, then revert */}
-                <span className="btn-label">{addedToCart ? "Added!" : "Add to Cart"}</span>
+                {addedToCart ? "Added!" : "Add to Cart"}
               </button>
 
               {/* MAKE OFFER
@@ -269,18 +269,18 @@ function ProductDetail() {
                 className="btn btn-outline btn-sm btn-blue-hover"
                 onClick={openOfferModal}
               >
-                <img src="/icons/message-square.svg" alt="Message" style={{ width: "3rem", height: "3rem" }} />
-                <span className="btn-label">Make Offer</span>
+                <img src="/icons/message-square.svg" alt="Message" style={{ width: "2rem", height: "2rem" }} />
+                Make Offer
               </button>
 
               <button className="btn btn-outline btn-sm btn-blue-hover">
-                <img src="/icons/heart.svg" alt="Save" style={{ width: "3rem", height: "3rem" }} />
-                <span className="btn-label">Save</span>
+                <img src="/icons/heart.svg" alt="Save" style={{ width: "2rem", height: "2rem" }} />
+                Save
               </button>
 
               <button className="btn btn-outline btn-sm btn-blue-hover">
-                <img src="/icons/share-2.svg" alt="Share" style={{ width: "3rem", height: "3rem" }} />
-                <span className="btn-label">Share</span>
+                <img src="/icons/share-2.svg" alt="Share" style={{ width: "2rem", height: "2rem" }} />
+                Share
               </button>
             </div>
           </div>
