@@ -1069,8 +1069,8 @@ img { max-width: 100%; height: auto; display: block; }
   .product-price { font-size: clamp(1.5rem, 2.5vw, 1.75rem); margin-top: 0.5rem; }
   .product-thumbs { gap: 0.5rem; max-width: 100%; width: 100%; overflow-x: auto; }
   .product-thumb { width: 4rem; height: 4rem; min-width: 4rem; flex-shrink: 0; }
-  .product-actions { flex-direction: column; gap: 0.5rem; width: 100%; }
-  .product-actions .btn { width: auto; max-width: 155px; }
+  .product-actions { flex-direction: row; flex-wrap: nowrap; gap: 0.5rem; width: 100%; overflow-x: auto; }
+  .product-actions .btn { width: auto; max-width: none; flex: 0 0 auto; white-space: nowrap; }
   .product-actions .product-share-btn { min-width: 170px; max-width: 100%; white-space: nowrap; }
   
   /* Cart Layout */
