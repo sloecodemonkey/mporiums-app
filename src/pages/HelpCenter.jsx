@@ -616,7 +616,7 @@ function HelpCenter() {
               <div className="help-contact-grid" style={{ marginBottom: "2rem" }}>
                 {[
                   { title: "Messaging", desc: "Message a seller directly through any product listing or your inbox.", icon: "💬", action: "Go to Inbox", link: "/messages" },
-                  { title: "Help articles", desc: "Browse our full library of guides and how-to articles.", icon: "📖", action: "Browse articles", link: "/help" },
+                  { title: "Help articles", desc: "Browse our full library of guides and how-to articles.         ", icon: "📖", action: "Browse articles", link: "/help" },
                   { title: "Report a problem", desc: "Have an issue with an order? Open a dispute from your order history.", icon: "🚨", action: "Order history", link: "/orders" },
                   { title: "Email support", desc: "Reach our support team at support@mporiums.com. We respond within 24 hours.", icon: "📧", action: "Send email", link: "mailto:support@mporiums.com" },
                 ].map((item) => (
