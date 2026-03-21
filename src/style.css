@@ -765,7 +765,12 @@ img { max-width: 100%; height: auto; display: block; }
     gap: 2rem;
   }
 
+  .help-content {
+    order: 1;
+  }
+
   .help-sidebar {
+    order: 2;
     position: static !important;
     top: auto !important;
     width: 100% !important;
@@ -1212,7 +1217,11 @@ img { max-width: 100%; height: auto; display: block; }
     margin-bottom: 2rem !important;
     padding-top: 1rem !important;
   }
+  .help-content {
+    order: 1;
+  }
   .help-sidebar {
+    order: 2;
     position: static !important;
     top: auto !important;
   }
