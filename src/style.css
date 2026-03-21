@@ -550,7 +550,7 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 1024px) { 
   .product-layout { grid-template-columns: 1fr; }
   .product-gallery {
-    max-width: 480px;
+    max-width: 600px;
     margin: 0 auto;
   }
 }
