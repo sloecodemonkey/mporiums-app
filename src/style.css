@@ -689,6 +689,9 @@ img { max-width: 100%; height: auto; display: block; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
+.help-contact-grid .link-primary {
+  width: fit-content;
+}
 .help-card-grid > *,
 .help-policy-grid > *,
 .help-contact-grid > * {
