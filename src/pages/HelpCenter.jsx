@@ -129,6 +129,31 @@ function HelpCenter() {
     }
   }, [location.pathname, location.hash]);
 
+  // Re-scroll to the active section when crossing the 1024px layout breakpoint.
+  // Without this, switching from 2-column (sidebar sticky) to 1-column (sidebar static)
+  // adds the sidebar's height above the content, pushing the active section off-screen.
+  useEffect(() => {
+    let lastWidth = window.innerWidth;
+
+    function handleResize() {
+      const w = window.innerWidth;
+      const crossedBreakpoint =
+        (lastWidth > 1024 && w <= 1024) || (lastWidth <= 1024 && w > 1024);
+      lastWidth = w;
+      if (crossedBreakpoint) {
+        const el = document.getElementById(activeSection);
+        if (el) {
+          requestAnimationFrame(() => {
+            el.scrollIntoView({ behavior: "auto", block: "start" });
+          });
+        }
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeSection]);
+
   // Scroll to a section and update active state
   function scrollTo(id) {
     setActiveSection(id);
