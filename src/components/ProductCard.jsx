@@ -1,20 +1,6 @@
 // ============================================================
 // ProductCard.jsx — updated to use WishlistContext
-// ============================================================
-// The heart button previously toggled a local useState(false)
-// that only existed inside this one card instance.
-// That meant:
-//   - Refreshing the page reset all hearts to empty
-//   - The Wishlist page had no way to know which items were saved
-//   - Clicking heart on the Shop page didn't reflect on Home page
-//
-// Now:
-//   - useWishlist() connects to the shared WishlistContext
-//   - isWishlisted(product.id) checks if THIS product is saved
-//   - toggleWishlist(product) adds or removes it from the list
-//   - The heart state is consistent everywhere on the site
-//   - It persists across page refreshes via localStorage
-// ============================================================
+// ============================================================ 
 
 import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";

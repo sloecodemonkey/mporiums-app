@@ -1,5 +1,5 @@
 // ============================================================
-// Navbar.jsx — updated with AuthContext
+// Navbar.jsx
 // ============================================================
 
 import { useState, useEffect } from "react";

@@ -8,14 +8,7 @@
 //      Used on: SellerProfile (summary + each review card)
 //
 //   2. Interactive mode — lets a user click to select a rating
-//      Used on: ReviewForm when a buyer leaves a review
-//
-// Props:
-//   rating      — number 1–5 (can be a decimal e.g. 4.7)
-//   max         — total stars to show (default 5)
-//   size        — pixel size of each star (default 18)
-//   interactive — if true, stars are clickable
-//   onChange    — callback when a star is clicked: (newRating) => {}
+//      Used on: ReviewForm when a buyer leaves a review 
 // ============================================================
 
 import { useState } from "react";

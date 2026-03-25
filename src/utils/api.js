@@ -1,30 +1,6 @@
 // ============================================================
 // src/utils/api.js
-// ============================================================
-// A central helper that all your React pages use to talk to
-// the testing API.
-//
-// HOW IT WORKS:
-//   - Reads the API URL from an environment variable
-//   - Automatically attaches the auth token to every request
-//   - Returns parsed JSON or throws a clean error
-//
-// USAGE in any component:
-//   import { apiFetch } from "../utils/api";
-//
-//   // GET request
-//   const products = await apiFetch("/products");
-//
-//   // POST request
-//   const order = await apiFetch("/orders", {
-//     method: "POST",
-//     body: JSON.stringify({ items: cart }),
-//   });
-//
-// SETUP:
-//   Create a .env file in your mporiums/ root with:
-//     VITE_API_URL=http://localhost:4000/api      (local)
-//     VITE_API_URL=https://your-app.railway.app/api  (deployed)
+// ============================================================ 
 // ============================================================
 console.log("API URL:", import.meta.env.VITE_API_URL);
 
