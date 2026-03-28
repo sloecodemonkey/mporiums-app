@@ -2,15 +2,10 @@
 // Home.jsx
 // ============================================================
 
-import { useState } from "react";
-
-
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import ProductCard from "../components/ProductCard";
-
-// Your products array 
-import products from "../data/products";
+import { fetchListings } from "../utils/api";
 
 // ============================================================
 // Category data
@@ -42,6 +37,13 @@ function Home() {
 
   // Hero search input value
   const [heroSearch, setHeroSearch] = useState("");
+
+  // Listings from API
+  const [listings, setListings] = useState([]);
+
+  useEffect(() => {
+    fetchListings().then(setListings).catch(() => {});
+  }, []);
 
   // ----------------------------------------------------------
   // NAVIGATION
@@ -192,7 +194,7 @@ function Home() {
             style={{ maxWidth: "100%", margin: "auto" }}
           >
             {/* Loop through all products and render a ProductCard for each. */}
-            {products.map((product) => (
+            {listings.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

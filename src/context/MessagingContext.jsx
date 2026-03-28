@@ -51,82 +51,15 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const MessagingContext = createContext();
 
-// ── Placeholder seed data ────────────────────────────────────
-// Gives the inbox something to show before real API data exists.
-// Each conversation is pre-seeded with a realistic back-and-forth.
-const SEED_CONVERSATIONS = [
-  {
-    id: "conv-1",
-    productId: "1",
-    productTitle: "Fender Stratocaster '62 Reissue",
-    productImage: "/images/fender-stratocaster.jpg",
-    productPrice: 1450,
-    sellerName: "VintageAxes",
-    sellerAvatar: "VA",
-    buyerName: "You",
-    lastMessage: "Does it come with the original case?",
-    lastMessageAt: "2024-03-10T14:30:00Z",
-    unreadCount: 1,
-    messages: [
-      {
-        id: "m1", sender: "you", type: "message",
-        text: "Hi! Is this still available?",
-        timestamp: "2024-03-10T14:00:00Z", read: true,
-      },
-      {
-        id: "m2", sender: "seller", type: "message",
-        text: "Yes, still available! It's in great condition — just had a full setup done.",
-        timestamp: "2024-03-10T14:15:00Z", read: true,
-      },
-      {
-        id: "m3", sender: "you", type: "message",
-        text: "Does it come with the original case?",
-        timestamp: "2024-03-10T14:30:00Z", read: false,
-      },
-    ],
-  },
-  {
-    id: "conv-2",
-    productId: "2",
-    productTitle: "Roland Juno-106 Synthesizer",
-    productImage: "/images/roland-juno-106.jpg",
-    productPrice: 2800,
-    sellerName: "SynthWizard",
-    sellerAvatar: "SW",
-    buyerName: "You",
-    lastMessage: "Would you take $2,500?",
-    lastMessageAt: "2024-03-09T10:00:00Z",
-    unreadCount: 0,
-    messages: [
-      {
-        id: "m4", sender: "you", type: "offer",
-        text: "I'd like to make an offer on this Juno-106.",
-        offerAmount: 2500,
-        timestamp: "2024-03-09T09:45:00Z", read: true,
-      },
-      {
-        id: "m5", sender: "you", type: "message",
-        text: "Would you take $2,500?",
-        timestamp: "2024-03-09T10:00:00Z", read: true,
-      },
-      {
-        id: "m6", sender: "seller", type: "message",
-        text: "Best I can do is $2,650 — it just had all the voice chips recapped.",
-        timestamp: "2024-03-09T10:20:00Z", read: true,
-      },
-    ],
-  },
-];
-
 export function MessagingProvider({ children }) {
 
   // Load from localStorage on first render
   const [conversations, setConversations] = useState(() => {
     try {
       const saved = localStorage.getItem("mporiums-messages");
-      return saved ? JSON.parse(saved) : SEED_CONVERSATIONS;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return SEED_CONVERSATIONS;
+      return [];
     }
   });
 

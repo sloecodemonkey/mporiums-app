@@ -1,53 +1,56 @@
 // ============================================================
 // ProductDetail.jsx
-// ============================================================ 
+// ============================================================
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import products from "../data/products";
+import { fetchListing } from "../utils/api";
 
 function ProductDetail() {
 
-  // ----------------------------------------------------------
-  // GET PRODUCT FROM URL
-  // ----------------------------------------------------------
-
   const { id } = useParams();
-  const product = products.find((p) => p.id === id);
-
-  // ----------------------------------------------------------
-  // CART
-  // ----------------------------------------------------------
-
   const { addToCart } = useCart();
 
-  // ----------------------------------------------------------
-  // SCROLL TO TOP
-  // ----------------------------------------------------------
+  // ── Data from API ─────────────────────────────────────────
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  function handleScrollToTop() {
-    window.scrollTo(0, 0);
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        const listing = await fetchListing(id);
+        setProduct(listing);
+      } catch (err) {
+        setNotFound(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [id]);
+
+  // ── UI state ──────────────────────────────────────────────
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [offerModalOpen, setOfferModalOpen]     = useState(false);
+  const [offerAmount, setOfferAmount]           = useState("");
+  const [offerMessage, setOfferMessage]         = useState("");
+  const [addedToCart, setAddedToCart]           = useState(false);
+
+  function handleScrollToTop() { window.scrollTo(0, 0); }
+
+  // ── Loading / not-found states ────────────────────────────
+  if (loading) {
+    return (
+      <main className="page-main center-content">
+        <p className="text-muted">Loading...</p>
+      </main>
+    );
   }
 
-  // ----------------------------------------------------------
-  // STATE
-  // ----------------------------------------------------------
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  const [offerModalOpen, setOfferModalOpen] = useState(false);
-  const [offerAmount, setOfferAmount] = useState("");
-  const [offerMessage, setOfferMessage] = useState("");
-
-  // Added to cart confirmation
-  const [addedToCart, setAddedToCart] = useState(false);
-
-  // ----------------------------------------------------------
-  // HANDLE PRODUCT NOT FOUND
-  // ----------------------------------------------------------
-  // If someone visits /product/99 and that ID doesn't exist,
-  // show a friendly message instead of crashing.
-  if (!product) {
+  if (notFound || !product) {
     return (
       <main className="page-main center-content">
         <div className="text-center">

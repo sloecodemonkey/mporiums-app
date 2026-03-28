@@ -13,13 +13,14 @@ function Auth() {
 
   const [isLoginMode, setIsLoginMode]     = useState(true);
   const [profilePreview, setProfilePreview] = useState(null);
-  const [error, setError]                 = useState("");      // ← NEW: shows API errors
-  const [loading, setLoading]             = useState(false);   // ← NEW: disables button while waiting
+  const [error, setError]                 = useState("");
+  const [loading, setLoading]             = useState(false);
+  // After register, flip to the verify step
+  const [pendingEmail, setPendingEmail]   = useState(null);
   const fileInputRef = useRef(null);
 
-  // ← NEW: lets us navigate to home after successful login
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, verifyEmail } = useAuth();
 
   // ----------------------------------------------------------
   // FUNCTIONS
@@ -52,50 +53,91 @@ function Auth() {
     reader.readAsDataURL(file);
   }
 
-  // ── UPDATED: handleAuth now calls the real API ─────────────
-  // Was: alert("Sign in functionality requires backend integration.")
-  // Now: calls login() or register() from utils/api.js,
-  //      saves the token to localStorage on success,
-  //      shows the API error message if something goes wrong.
   async function handleAuth(e) {
     e.preventDefault();
-    setError("");       // clear previous errors
-    setLoading(true);   // disable button and show "Please wait..."
+    setError("");
+    setLoading(true);
 
     try {
       if (isLoginMode) {
-        // ── SIGN IN ──────────────────────────────────────────
-        // Reads email + password directly from the form fields
-        await login(
-          e.target.email.value,
-          e.target.password.value
-        );
+        await login(e.target.email.value, e.target.password.value);
+        navigate("/");
       } else {
-        // ── SIGN UP ──────────────────────────────────────────
-        // Reads email, password, and displayName from the form.
-        // Falls back to the email if displayName is empty.
         await register(
           e.target.email.value,
           e.target.password.value,
-          e.target.displayName?.value || e.target.email.value
+          {
+            displayName: e.target.displayName?.value || "",
+            firstName:   e.target.firstName?.value   || "",
+            lastName:    e.target.lastName?.value     || "",
+          }
         );
+        // Registration succeeded — show the verify-code step
+        setPendingEmail(e.target.email.value);
       }
-
-      // Success — navigate to home page
-      navigate("/");
-
     } catch (err) {
-      // Show the error message from the API
-      // e.g. "Invalid email or password" or "Email already exists"
       setError(err.message);
     } finally {
-      setLoading(false); // re-enable the button whether it worked or not
+      setLoading(false);
+    }
+  }
+
+  async function handleVerify(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await verifyEmail(pendingEmail, e.target.code.value);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   // ----------------------------------------------------------
   // JSX
   // ----------------------------------------------------------
+
+  // ── VERIFY STEP ──────────────────────────────────────────
+  if (pendingEmail) {
+    return (
+      <main className="page-main center-content">
+        <div className="auth-card">
+          <h1 className="auth-title">Check Your Email</h1>
+          <p className="text-muted">
+            We sent a 6-digit code to <strong>{pendingEmail}</strong>. Enter it below to activate your account.
+          </p>
+          <form onSubmit={handleVerify} style={{ marginTop: "2rem" }}>
+            <div className="form-group">
+              <label>Verification Code</label>
+              <input type="text" name="code" required maxLength={6} placeholder="123456" />
+            </div>
+            {error && (
+              <p style={{
+                color: "var(--destructive)", fontSize: "0.875rem",
+                marginBottom: "1rem", padding: "0.6rem 0.75rem",
+                background: "var(--muted)", borderRadius: "var(--radius)",
+                border: "0.5px solid var(--destructive)",
+              }}>{error}</p>
+            )}
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading}
+              style={{ opacity: loading ? 0.7 : 1 }}>
+              {loading ? "Verifying..." : "Verify Email"}
+            </button>
+          </form>
+          <p className="text-muted" style={{ marginTop: "1rem", fontSize: "0.875rem" }}>
+            Wrong email?{" "}
+            <button className="link-primary" onClick={() => { setPendingEmail(null); setError(""); }}>
+              Go back
+            </button>
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="page-main center-content">

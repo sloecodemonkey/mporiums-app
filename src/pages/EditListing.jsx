@@ -1,25 +1,12 @@
 // ============================================================
-// EditListing.jsx
-// src/pages/EditListing.jsx
-// Route: /sell/edit/:id
-// ============================================================
-// Pre-fills the Sell form with an existing listing's data
-// so sellers can update price, photos, description, condition.
-//
-// Reads the listing id from the URL, finds the product,
-// and pre-populates all form fields.
-//
-// In production:
-//   GET  /api/products/:id   → load existing listing
-//   PATCH /api/products/:id  → save changes
+// EditListing.jsx  —  Route: /sell/edit/:id
 // ============================================================
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import products from "../data/products";
+import { fetchListing, fetchCategories, updateListing } from "../utils/api";
 
-const CATEGORIES = ["Guitars & Basses", "Synthesizers", "Headphones", "Speakers & Monitors", "Microphones", "DJ Equipment"];
-const CONDITIONS  = ["Like New", "Excellent", "Good", "Fair"];
+const CONDITIONS = ["Like New", "Excellent", "Good", "Fair"];
 
 // ── Fee calculator (same as Sell.jsx) ────────────────────────
 function calcFees(price, type) {
@@ -38,75 +25,118 @@ function calcFees(price, type) {
 
 function EditListing() {
 
-  const { id }    = useParams();
-  const navigate  = useNavigate();
+  const { id }       = useParams();
+  const navigate     = useNavigate();
   const fileInputRef = useRef(null);
 
-  // Find the listing to edit
-  const product = products.find((p) => p.id === id);
+  // ── Data from API ─────────────────────────────────────────
+  const [pageLoading, setPageLoading] = useState(true);
+  const [notFound, setNotFound]       = useState(false);
+  const [CATEGORIES, setCategories]   = useState([]);
 
-  // ── 404 if listing not found ─────────────────────────────
-  if (!product) {
-    return (
-      <main className="page-main center-content" style={{ paddingTop: "64px" }}>
-        <div className="text-center">
-          <h1 style={{ fontSize: "4rem", fontWeight: 700 }}>404</h1>
-          <p className="text-muted" style={{ marginBottom: "1rem" }}>Listing not found</p>
-          <Link to="/my-listings" className="link-primary">← Back to My Listings</Link>
-        </div>
-      </main>
-    );
-  }
+  // ── Form state ────────────────────────────────────────────
+  const [title, setTitle]             = useState("");
+  const [price, setPrice]             = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory]       = useState("");
+  const [condition, setCondition]     = useState("");
+  const [sellerType, setSellerType]   = useState("standard");
+  // existingImages: URL strings from server to keep
+  // newImages: { file: File, preview: string } for new uploads
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages]           = useState([]);
+  const [saving, setSaving]                 = useState(false);
+  const [saveError, setSaveError]           = useState("");
 
-  // ── Pre-fill state from existing listing ─────────────────
-  const [title, setTitle]           = useState(product.title);
-  const [price, setPrice]           = useState(String(product.price));
-  const [description, setDescription] = useState(product.description || "");
-  const [category, setCategory]     = useState(product.category);
-  const [condition, setCondition]   = useState(product.condition);
-  const [sellerType, setSellerType] = useState("standard");
-  const [images, setImages]         = useState(product.images || []);
-  const [saved, setSaved]           = useState(false);
+  const totalImages = existingImages.length + newImages.length;
+
+  // ── Fetch listing + categories on mount ───────────────────
+  useEffect(() => {
+    async function load() {
+      try {
+        const [listing, cats] = await Promise.all([
+          fetchListing(id),
+          fetchCategories(),
+        ]);
+        setTitle(listing.title);
+        setPrice(String(listing.price));
+        setDescription(listing.description || "");
+        setCategory(listing.category || "");
+        setCondition(listing.condition || "");
+        setExistingImages(listing.images || []);
+        setCategories(cats.map((c) => c.name));
+      } catch {
+        setNotFound(true);
+      } finally {
+        setPageLoading(false);
+      }
+    }
+    load();
+  }, [id]);
 
   const fees = calcFees(price, sellerType);
   const showPreview = !!(title || price);
 
   function handleImageUpload(e) {
     const files = Array.from(e.target.files);
-    const remaining = 8 - images.length;
-    const newImages = files
+    const remaining = 6 - totalImages;
+    const added = files
       .filter((f) => f.type.startsWith("image/"))
       .slice(0, remaining)
-      .map((f) => URL.createObjectURL(f));
-    setImages((prev) => [...prev, ...newImages]);
+      .map((f) => ({ file: f, preview: URL.createObjectURL(f) }));
+    setNewImages((prev) => [...prev, ...added]);
     e.target.value = "";
   }
 
-  function removeImage(i) {
-    setImages((prev) => prev.filter((_, idx) => idx !== i));
+  function removeExistingImage(i) {
+    setExistingImages((prev) => prev.filter((_, idx) => idx !== i));
   }
 
-  function handleSave(e) {
+  function removeNewImage(i) {
+    setNewImages((prev) => prev.filter((_, idx) => idx !== i));
+  }
+
+  async function handleSave(e) {
     e.preventDefault();
     if (!title.trim() || !price || !category || !condition) {
-      alert("Please fill in all required fields.");
+      setSaveError("Please fill in all required fields.");
       return;
     }
-    // In production: PATCH /api/products/:id
-    setSaved(true);
-    setTimeout(() => {
+    setSaveError("");
+    setSaving(true);
+    try {
+      const formData = new FormData();
+      formData.append("title",           title.trim());
+      formData.append("description",     description.trim());
+      formData.append("price",           price);
+      formData.append("condition",       condition);
+      formData.append("existing_images", JSON.stringify(existingImages));
+      newImages.forEach((img) => formData.append("images", img.file));
+      await updateListing(id, formData);
       navigate("/my-listings");
-    }, 1500);
+    } catch (err) {
+      setSaveError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
-  // ── Saved confirmation ────────────────────────────────────
-  if (saved) {
+  // ── Loading / not-found guards ────────────────────────────
+  if (pageLoading) {
     return (
       <main className="page-main center-content" style={{ paddingTop: "64px" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✅</div>
-          <h2 style={{ fontFamily: "var(--font-display)", marginBottom: "0.5rem" }}>Listing Updated!</h2>
-          <p className="text-muted">Redirecting to your listings...</p>
+        <p className="text-muted">Loading...</p>
+      </main>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <main className="page-main center-content" style={{ paddingTop: "64px" }}>
+        <div className="text-center">
+          <h1 style={{ fontSize: "4rem", fontWeight: 700 }}>404</h1>
+          <p className="text-muted" style={{ marginBottom: "1rem" }}>Listing not found</p>
+          <Link to="/my-listings" className="link-primary">← Back to My Listings</Link>
         </div>
       </main>
     );
@@ -123,7 +153,7 @@ function EditListing() {
 
         <div style={{ marginBottom: "2rem" }}>
           <h1 className="page-title" style={{ marginBottom: "0.25rem" }}>Edit Listing</h1>
-          <p className="text-muted text-sm">Editing: {product.title}</p>
+          <p className="text-muted text-sm">Editing: {title}</p>
         </div>
 
         <div className="sell-layout">
@@ -135,35 +165,45 @@ function EditListing() {
             <div className="form-card">
               <h3 className="form-card-title">Photos</h3>
               <p className="text-muted text-sm" style={{ marginBottom: "1rem" }}>
-                {images.length}/8 photos · First photo is the cover image
+                {totalImages}/6 photos · First photo is the cover image
               </p>
 
-              {/* Existing thumbnails */}
-              {images.length > 0 && (
+              {/* Existing images from server */}
+              {existingImages.length > 0 && (
                 <div className="upload-thumbs" style={{ marginBottom: "1rem" }}>
-                  {images.map((src, i) => (
-                    <div key={i} className="upload-thumb">
+                  {existingImages.map((src, i) => (
+                    <div key={`existing-${i}`} className="upload-thumb">
                       <img src={src} alt={`Photo ${i + 1}`} />
-                      <button className="remove-thumb" onClick={() => removeImage(i)}>✕</button>
-                      {i === 0 && (
+                      <button className="remove-thumb" onClick={() => removeExistingImage(i)}>✕</button>
+                      {i === 0 && newImages.length === 0 && (
                         <span style={{
                           position: "absolute", bottom: "4px", left: "4px",
                           background: "var(--primary)", color: "#fff",
                           fontSize: "0.6rem", padding: "1px 5px", borderRadius: "3px", fontWeight: 600,
-                        }}>
-                          Cover
-                        </span>
+                        }}>Cover</span>
                       )}
                     </div>
                   ))}
                 </div>
               )}
 
-              {images.length < 8 && (
+              {/* Newly added images */}
+              {newImages.length > 0 && (
+                <div className="upload-thumbs" style={{ marginBottom: "1rem" }}>
+                  {newImages.map((img, i) => (
+                    <div key={`new-${i}`} className="upload-thumb">
+                      <img src={img.preview} alt={`New photo ${i + 1}`} />
+                      <button className="remove-thumb" onClick={() => removeNewImage(i)}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {totalImages < 6 && (
                 <>
                   <div className="upload-area" onClick={() => fileInputRef.current.click()}>
                     <span className="upload-text">Click to add more photos</span>
-                    <span className="upload-subtext">{8 - images.length} remaining</span>
+                    <span className="upload-subtext">{6 - totalImages} remaining</span>
                   </div>
                   <input
                     type="file" ref={fileInputRef} accept="image/*"
@@ -307,9 +347,24 @@ function EditListing() {
             </div>
 
             {/* Actions */}
+            {saveError && (
+              <p style={{
+                color: "var(--destructive)", fontSize: "0.875rem",
+                marginBottom: "0.75rem", padding: "0.6rem 0.75rem",
+                background: "var(--muted)", borderRadius: "var(--radius)",
+                border: "0.5px solid var(--destructive)",
+              }}>
+                {saveError}
+              </p>
+            )}
             <div style={{ display: "flex", gap: "0.75rem" }}>
-              <button className="btn btn-primary btn-lg" style={{ flex: 1 }} onClick={handleSave}>
-                Save Changes
+              <button
+                className="btn btn-primary btn-lg"
+                style={{ flex: 1, opacity: saving ? 0.7 : 1 }}
+                onClick={handleSave}
+                disabled={saving}
+              >
+                {saving ? "Saving..." : "Save Changes"}
               </button>
               <Link to="/my-listings" className="btn btn-outline btn-lg">
                 Cancel
@@ -328,9 +383,9 @@ function EditListing() {
                   {condition && <span className="badge badge-secondary">{condition}</span>}
                 </div>
                 {category && <p className="text-muted text-xs">{category}</p>}
-                {images[0] && (
+                {(existingImages[0] || newImages[0]?.preview) && (
                   <img
-                    src={images[0]}
+                    src={existingImages[0] || newImages[0].preview}
                     alt="Preview"
                     style={{ width: "100%", borderRadius: "var(--radius)", marginTop: "0.75rem", objectFit: "cover", maxHeight: "200px" }}
                   />

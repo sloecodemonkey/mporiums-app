@@ -24,7 +24,7 @@
 // ============================================================
 
 import { createContext, useContext, useState } from "react";
-import { login as apiLogin, register as apiRegister, logout as apiLogout, getCurrentUser } from "../utils/api";
+import { login as apiLogin, register as apiRegister, verifyEmail as apiVerify, logout as apiLogout, getCurrentUser } from "../utils/api";
 
 const AuthContext = createContext();
 
@@ -43,11 +43,18 @@ export function AuthProvider({ children }) {
   }
 
   // ── Register ─────────────────────────────────────────────
-  // Creates a new account, saves the token, updates user state
-  async function register(email, password, displayName, sellerType) {
-    const newUser = await apiRegister(email, password, displayName, sellerType);
-    setUser(newUser);
-    return newUser;
+  // Creates account and sends verification email. Returns { user, message }.
+  // Call verifyEmail() next to complete sign-up and log the user in.
+  async function register(email, password, fields) {
+    return await apiRegister(email, password, fields);
+  }
+
+  // ── Verify email ─────────────────────────────────────────
+  // Submits the 6-digit code; logs the user in on success.
+  async function verifyEmail(email, code) {
+    const loggedInUser = await apiVerify(email, code);
+    setUser(loggedInUser);
+    return loggedInUser;
   }
 
   // ── Logout ───────────────────────────────────────────────
@@ -72,6 +79,7 @@ export function AuthProvider({ children }) {
       isLoggedIn: !!user,
       login,
       register,
+      verifyEmail,
       logout,
       updateUser,
     }}>

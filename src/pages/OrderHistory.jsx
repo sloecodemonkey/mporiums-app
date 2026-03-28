@@ -13,76 +13,9 @@
 // In production: GET /api/orders?userId=me
 // ============================================================
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-// ── Seed orders ──────────────────────────────────────────────
-const SEED_ORDERS = [
-  {
-    id: "ORD-10042",
-    date: "2024-03-10",
-    status: "delivered",
-    tracking: "1Z999AA10123456784",
-    carrier: "UPS",
-    items: [
-      { productId: "3", title: "Sennheiser HD 650 Headphones", price: 280, qty: 1, image: "/images/sennheiser-hd650.jpg", seller: "AudioPhile99" },
-    ],
-    subtotal: 280,
-    shipping: 14.99,
-    tax: 22.40,
-    total: 317.39,
-    address: { name: "Test Buyer", street: "123 Main St", city: "Austin", state: "TX", zip: "78701" },
-    reviewLeft: false,
-  },
-  {
-    id: "ORD-10038",
-    date: "2024-02-28",
-    status: "delivered",
-    tracking: "9400111899223397681209",
-    carrier: "USPS",
-    items: [
-      { productId: "5", title: "Shure SM7B Microphone", price: 340, qty: 1, image: "/images/shure-sm7b.jpg", seller: "ProAudioDeals" },
-    ],
-    subtotal: 340,
-    shipping: 0,
-    tax: 27.20,
-    total: 367.20,
-    address: { name: "Test Buyer", street: "123 Main St", city: "Austin", state: "TX", zip: "78701" },
-    reviewLeft: true,
-  },
-  {
-    id: "ORD-10021",
-    date: "2024-02-10",
-    status: "shipped",
-    tracking: "1Z999AA10123456785",
-    carrier: "UPS",
-    items: [
-      { productId: "4", title: "Yamaha HS8 Studio Monitors (Pair)", price: 520, qty: 1, image: "/images/yamaha-hs8.jpg", seller: "StudioGear" },
-    ],
-    subtotal: 520,
-    shipping: 0,
-    tax: 41.60,
-    total: 561.60,
-    address: { name: "Test Buyer", street: "123 Main St", city: "Austin", state: "TX", zip: "78701" },
-    reviewLeft: false,
-  },
-  {
-    id: "ORD-10008",
-    date: "2024-01-15",
-    status: "cancelled",
-    tracking: null,
-    carrier: null,
-    items: [
-      { productId: "1", title: "Fender Stratocaster '62 Reissue", price: 1450, qty: 1, image: "/images/fender-stratocaster.jpg", seller: "VintageAxes" },
-    ],
-    subtotal: 1450,
-    shipping: 0,
-    tax: 116,
-    total: 1566,
-    address: { name: "Test Buyer", street: "123 Main St", city: "Austin", state: "TX", zip: "78701" },
-    reviewLeft: false,
-  },
-];
+import { fetchMyOrders } from "../utils/api";
 
 // ── Status config ─────────────────────────────────────────────
 const STATUS_CONFIG = {
@@ -98,9 +31,24 @@ function formatDate(dateStr) {
 
 function OrderHistory() {
 
-  const [filter, setFilter]       = useState("all");
-  const [expanded, setExpanded]   = useState(null);
-  const [orders, setOrders]       = useState(SEED_ORDERS);
+  const [filter, setFilter]     = useState("all");
+  const [expanded, setExpanded] = useState(null);
+  const [orders, setOrders]     = useState([]);
+  const [loading, setLoading]   = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchMyOrders();
+        setOrders(data);
+      } catch (err) {
+        console.error("Failed to load orders:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
   const filtered = filter === "all"
     ? orders
@@ -108,6 +56,14 @@ function OrderHistory() {
 
   function markReviewed(orderId) {
     setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, reviewLeft: true } : o));
+  }
+
+  if (loading) {
+    return (
+      <main className="page-main center-content" style={{ paddingTop: "64px" }}>
+        <p className="text-muted">Loading...</p>
+      </main>
+    );
   }
 
   return (
@@ -221,7 +177,6 @@ function OrderHistory() {
                         <div style={{ display: "flex", alignItems: "center", gap: "0" }}>
                           {["Order Placed", "Shipped", "Delivered"].map((step, i) => {
                             const done = status.steps > i;
-                            const active = status.steps === i + 1;
                             return (
                               <div key={step} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
                                 <div style={{ display: "flex", width: "100%", alignItems: "center" }}>

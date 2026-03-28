@@ -1,48 +1,35 @@
 // ============================================================
 // Sell.jsx
-// ============================================================ 
+// ============================================================
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-// Sell categories and conditions 
-const sellCategories = [
-  "Guitars & Basses",
-  "Synthesizers",
-  "Headphones",
-  "Speakers & Monitors",
-  "Microphones",
-  "DJ Equipment",
-];
+import { fetchCategories, createListing } from "../utils/api";
 
 const sellConditions = ["Like New", "Excellent", "Good", "Fair"];
 
 function Sell() {
 
-  // ----------------------------------------------------------
-  // STATE — 
-  // ----------------------------------------------------------
-
- 
-  const [sellCategory, setSellCategory] = useState("");
-
- 
-  const [sellCondition, setSellCondition] = useState("");
- 
+  // ── State ─────────────────────────────────────────────────
+  const [sellCategories, setSellCategories] = useState([]);
+  const [sellCategory, setSellCategory]     = useState("");
+  const [sellCondition, setSellCondition]   = useState("");
+  // Each entry: { file: File, preview: string }
   const [uploadedImages, setUploadedImages] = useState([]);
-
-   
-  const [sellTitle, setSellTitle] = useState("");
-
-  
-  const [sellPrice, setSellPrice] = useState("");
-
-  
+  const [sellTitle, setSellTitle]           = useState("");
+  const [sellPrice, setSellPrice]           = useState("");
   const [sellDescription, setSellDescription] = useState("");
- 
-  const [sellerType, setSellerType] = useState("standard");
+  const [sellerType, setSellerType]         = useState("standard");
+  const [publishing, setPublishing]         = useState(false);
+  const [publishError, setPublishError]     = useState("");
+
   const { user, isLoggedIn } = useAuth();
+
+  // ── Fetch categories from API ─────────────────────────────
+  useEffect(() => {
+    fetchCategories().then((cats) => setSellCategories(cats.map((c) => c.name))).catch(() => {});
+  }, []);
 
   const sellerDisplayName = user?.displayName || user?.name || (user?.email ? user.email.split("@")[0] : "Guest");
   const sellerSubtitle = isLoggedIn
@@ -122,40 +109,56 @@ function Sell() {
   const showPreview = !!(sellTitle || sellPrice);
 
   // ----------------------------------------------------------
-  // IMAGE UPLOAD 
+  // IMAGE UPLOAD  (stores File + preview URL, max 6)
   // ----------------------------------------------------------
-  
+
   function handleImageUpload(e) {
     const files = Array.from(e.target.files);
-    const remaining = 8 - uploadedImages.length; // max 8 images
+    const remaining = 6 - uploadedImages.length;
 
     const newImages = files
       .filter((f) => f.type.startsWith("image/"))
       .slice(0, remaining)
-      .map((f) => URL.createObjectURL(f));
+      .map((f) => ({ file: f, preview: URL.createObjectURL(f) }));
 
     setUploadedImages((prev) => [...prev, ...newImages]);
-
-    // Reset the input so the same file can be re-selected if needed
     e.target.value = "";
   }
 
-  
   function removeUploadedImage(i) {
     setUploadedImages((prev) => prev.filter((_, index) => index !== i));
   }
 
   // ----------------------------------------------------------
-  // PUBLISH 
+  // PUBLISH — POST to API
   // ----------------------------------------------------------
 
-  function handlePublishListing() {
+  async function handlePublishListing() {
     if (!sellTitle.trim() || !sellPrice || !sellCategory || !sellCondition) {
-      alert("Please fill in all required fields (title, price, category, condition).");
+      setPublishError("Please fill in all required fields (title, price, category, condition).");
       return;
     }
-    alert("Listing published! (Requires backend integration)");
-    navigate("/shop");
+
+    setPublishError("");
+    setPublishing(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("title",       sellTitle.trim());
+      formData.append("description", sellDescription.trim());
+      formData.append("price",       sellPrice);
+      formData.append("category",    sellCategory);
+      formData.append("condition",   sellCondition);
+
+      uploadedImages.forEach((img) => formData.append("images", img.file));
+
+      await createListing(formData);
+      navigate("/my-listings");
+    } catch (err) {
+      setPublishError(err.message);
+    } finally {
+      setPublishing(false);
+    }
   }
 
   // ----------------------------------------------------------
@@ -190,13 +193,10 @@ function Sell() {
               <label className="label-with-icon">
                 <img src="/icons/camera.svg" alt="Photos" style={{ width: "1.25rem", height: "1.25rem" }} />
                 Photos{" "}
-                
-                <span className="text-muted text-xs">({uploadedImages.length}/8)</span>
+                <span className="text-muted text-xs">({uploadedImages.length}/6)</span>
               </label>
 
-              {/* Upload area
-                 */}
-              {uploadedImages.length < 8 && (
+              {uploadedImages.length < 6 && (
                 <div
                   className="upload-area"
                   onClick={() => fileInputRef.current.click()}
@@ -218,14 +218,11 @@ function Sell() {
                 onChange={handleImageUpload}
               />
 
-              {/* THUMBNAIL GRID
-                  */}
               {uploadedImages.length > 0 && (
                 <div className="upload-thumbs">
-                  {uploadedImages.map((src, i) => (
+                  {uploadedImages.map((img, i) => (
                     <div key={i} className="upload-thumb">
-                      <img src={src} alt={`Upload ${i + 1}`} />
-                      
+                      <img src={img.preview} alt={`Upload ${i + 1}`} />
                       <button
                         className="upload-thumb-remove"
                         onClick={() => removeUploadedImage(i)}
@@ -579,11 +576,23 @@ function Sell() {
             </div>
 
             {/* PUBLISH BUTTON */}
+            {publishError && (
+              <p style={{
+                color: "var(--destructive)", fontSize: "0.875rem",
+                marginBottom: "0.75rem", padding: "0.6rem 0.75rem",
+                background: "var(--muted)", borderRadius: "var(--radius)",
+                border: "0.5px solid var(--destructive)",
+              }}>
+                {publishError}
+              </p>
+            )}
             <button
               className="btn btn-primary btn-lg btn-full"
               onClick={handlePublishListing}
+              disabled={publishing}
+              style={{ opacity: publishing ? 0.7 : 1 }}
             >
-              Publish Listing
+              {publishing ? "Publishing..." : "Publish Listing"}
             </button>
           </div>
         </div>
