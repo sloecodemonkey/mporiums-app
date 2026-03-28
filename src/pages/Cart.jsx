@@ -187,7 +187,7 @@ function Cart() {
                 </Link>
 
                 <div className="secure-note">
-                  🛡️ Secure checkout · Buyer protection included
+                  🛡️ Secure checkout
                 </div>
               </div>
             </div>
