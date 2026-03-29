@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/contexts';
-import { apiUrl } from '@/lib/api';
+import { useAuth } from "../context/AuthContext";
+import { fetchMyListings } from "../utils/api";
 
 export default function StripeOnboardingBanner({ className = '', forceShow = false }) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [hasListings, setHasListings] = useState(false);
   const [loading, setLoading] = useState(!forceShow);
 
@@ -21,7 +21,7 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
 
   const checkUserListings = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/my-listings/${user?.id}`);
+      const response = await fetchMyListings(user?.id);
       if (response.ok) {
         const listings = await response.json();
         setHasListings(listings.length > 0);
