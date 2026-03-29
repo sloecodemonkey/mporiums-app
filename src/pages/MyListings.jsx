@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fetchMyListings, deleteListing } from "../utils/api";
+import StripeOnboardingBanner from "../components/StripeOnBoardingBanner";
 
 function MyListings() {
   const { user } = useAuth();
@@ -62,7 +63,9 @@ function MyListings() {
   return (
     <main className="page-main" style={{ paddingTop: "64px" }}>
       <div className="container">
-
+        {/* Stripe Onboarding Warning - only show if user has listings */}
+        {listings.length > 0 && <StripeOnboardingBanner className="mb-6" forceShow />}
+        
         {/* PAGE HEADER */}
         <div style={{
           display: "flex", justifyContent: "space-between",
