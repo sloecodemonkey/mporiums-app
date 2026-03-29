@@ -240,7 +240,7 @@ function ProductDetail() {
               <div className="seller-info">
 
                 {/* Seller avatar initials */}
-                {/* <div className="seller-avatar">{product.sellerAvatar}</div> */}
+                <div className="seller-avatar">{product.sellerAvatar}</div>
 
                 <div className="seller-name">
                   {/* Seller name — plain text for now.
