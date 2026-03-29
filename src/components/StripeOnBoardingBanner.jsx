@@ -46,11 +46,11 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
   }
 
   return (
-    <div className={`bg-gradient-to-r from-amber-500 to-yellow-500 text-gray-900 px-4 py-3 rounded-lg shadow-md ${className}`}>
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+    <div className={`alert alert-warning ${className}`}>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <svg
-            className="w-6 h-6 flex-shrink-0"
+            style={{ width: "1.5rem", height: "1.5rem", flexShrink: 0 }}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -62,14 +62,11 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
             />
           </svg>
-          <p className="font-medium text-sm sm:text-base">
+          <p style={{ margin: 0, fontWeight: 600, fontSize: "0.9rem" }}>
             Complete Stripe setup to receive payments for your listings
           </p>
         </div>
-        <Link
-          to="/seller-onboarding"
-          className="flex-shrink-0 px-4 py-2 bg-gray-900 text-white rounded-lg font-semibold text-sm hover:bg-gray-800 transition-colors"
-        >
+        <Link to="/seller-onboarding" className="btn btn-sm btn-primary" style={{ flexShrink: 0 }}>
           Complete Setup
         </Link>
       </div>
