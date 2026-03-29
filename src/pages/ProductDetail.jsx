@@ -256,7 +256,7 @@ function ProductDetail() {
 
                   {/* Verified badge — only show if verified
                       */}
-                  {product.verified && (
+                  {product.sellerVerified && (
                     <img
                       src="/icons/shield.svg"
                       alt="Verified seller"
@@ -278,7 +278,7 @@ function ProductDetail() {
             {/* ── ACTION BUTTONS ── */}
             <div className="product-actions">
               {/* DONT ALLOW ADD TO CART IF SELLER HASN'T COMPLETED STRIPE ONBOARDING */}
-              {!product.verified && (
+              {!product.sellerVerified && (
                 <div className="alert alert-warning" role="alert">
                   <p>The seller has not completed their payment setup yet.</p>
                   <p>Contact the seller to express your interest and encourage them to complete their setup.</p>
@@ -326,7 +326,7 @@ function ProductDetail() {
                   </div>
                 </div>
               )}
-              {product.verified && (
+              {product.sellerVerified && (
                 <>
                   {/* ADD TO CART */}
                   <button className="btn btn-primary btn-sm btn-flex"
