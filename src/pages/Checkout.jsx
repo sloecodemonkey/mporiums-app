@@ -503,14 +503,14 @@ function Checkout() {
           <div className="form-group">
             <label>Name</label>
             <input
-              type="text" name="firstName" value={shipForm.name}
+              type="text" name="name" value={shipForm.name}
               onChange={handleShipChange} required placeholder="John"
             />
           </div>
           <div className="form-group">
             <label>Street Address</label>
             <input
-              type="text" name="address" value={shipForm.addressLine1}
+              type="text" name="addressLine1" value={shipForm.addressLine1}
               onChange={handleShipChange} required placeholder="123 Main St"
             />
           </div>
