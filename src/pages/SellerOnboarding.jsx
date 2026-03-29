@@ -5,13 +5,14 @@
 // ============================================================
 
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../utils/api";
 
 export default function SellerOnboarding() {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
@@ -19,7 +20,7 @@ export default function SellerOnboarding() {
 
   useEffect(() => {
     if (user) checkAccountStatus();
-  }, [user]);
+  }, [user, location.search]);
 
   async function checkAccountStatus() {
     try {
