@@ -46,7 +46,7 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
   }
 
   return (
-    <div className={`alert alert-warning ${className}`}>
+    <div className={`alert alert-warning`} style={{ marginBottom: "2rem" }}>
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <svg
@@ -62,9 +62,9 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
             />
           </svg>
-          <p style={{ margin: 0, fontWeight: 600, fontSize: "0.9rem" }}>
+          <h3>
             Complete Stripe setup to receive payments for your listings
-          </p>
+          </h3>
         </div>
         <Link to="/seller-onboarding" className="btn btn-sm btn-primary" style={{ flexShrink: 0 }}>
           Complete Setup
