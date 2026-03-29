@@ -39,9 +39,8 @@ function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [saveAddress, setSaveAddress] = useState(true);
   const [shipForm, setShipForm] = useState({
-    firstName: "",
-    lastName: "",
-    address: "",
+    name: "",
+    addressLine1: "",
     city: "",
     state: "",
     zip: "",
@@ -501,26 +500,17 @@ function Checkout() {
         <hr className="separator" />
         <ErrorBanner />
         <form onSubmit={handleShippingSubmit}>
-          <div className="form-grid-2">
-            <div className="form-group">
-              <label>First Name</label>
-              <input
-                type="text" name="firstName" value={shipForm.firstName}
-                onChange={handleShipChange} required placeholder="John"
-              />
-            </div>
-            <div className="form-group">
-              <label>Last Name</label>
-              <input
-                type="text" name="lastName" value={shipForm.lastName}
-                onChange={handleShipChange} required placeholder="Doe"
-              />
-            </div>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text" name="firstName" value={shipForm.name}
+              onChange={handleShipChange} required placeholder="John"
+            />
           </div>
           <div className="form-group">
             <label>Street Address</label>
             <input
-              type="text" name="address" value={shipForm.address}
+              type="text" name="address" value={shipForm.addressLine1}
               onChange={handleShipChange} required placeholder="123 Main St"
             />
           </div>
