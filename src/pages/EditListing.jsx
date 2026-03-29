@@ -7,20 +7,22 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { fetchListing, fetchCategories, updateListing } from "../utils/api";
 
 const CONDITIONS = ["Like New", "Excellent", "Good", "Fair"];
+const PLATFORM_FEE = import.meta.env.PLATFORM_FEE || 3.31; // 3.31% selling fee
 
 // ── Fee calculator (same as Sell.jsx) ────────────────────────
 function calcFees(price, type) {
   if (!price || isNaN(price) || Number(price) <= 0) return { transactionFee: 0, sellingFee: 0, totalFees: 0, youReceive: 0, orderTotal: 0, shipping: 0, tax: 0, transactionRate: 0 };
   const itemPrice = Number(price);
-  const shipping  = itemPrice > 500 ? 0 : 14.99;
-  const tax       = itemPrice * 0.08;
-  const orderTotal = itemPrice + shipping + tax;
-  const transactionRate = type === "preferred" ? 0.0299 : 0.0319;
-  const transactionFee  = Math.min((orderTotal * transactionRate) + 0.49, 500);
-  const sellingFee      = Math.min(Math.max((itemPrice + shipping) * 0.05, 0.50), 500);
-  const totalFees       = transactionFee + sellingFee;
+  //const shipping  = itemPrice > 500 ? 0 : 14.99;
+  // Tax is handled by Stripe, so we set it to 0 here and let Stripe calculate it at checkout based on the buyer's location
+  //const tax       = itemPrice * 0.08; 
+  const orderTotal = itemPrice /*+ shipping + tax*/;
+  const transactionRate = PLATFORM_FEE / 100; // Convert percentage to decimal
+  const transactionFee  = orderTotal * transactionRate;
+  //const sellingFee      = Math.min(Math.max((itemPrice + shipping) * 0.05, 0.50), 500);
+  const totalFees       = transactionFee /*+ sellingFee*/;
   const youReceive      = Math.max(itemPrice - totalFees, 0);
-  return { transactionFee, sellingFee, totalFees, youReceive, orderTotal, shipping, tax, transactionRate };
+  return { transactionFee, totalFees, youReceive, orderTotal, /*shipping, tax,*/ transactionRate };
 }
 
 function EditListing() {
@@ -288,41 +290,7 @@ function EditListing() {
             {/* Seller type */}
             <div className="form-card">
               <h3 className="form-card-title">Selling Fees</h3>
-              <div style={{ border: "0.5px solid var(--border)", borderRadius: "calc(var(--radius) - 4px)", overflow: "hidden", marginBottom: "0.75rem" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", background: "var(--muted)", borderBottom: "0.5px solid var(--border)" }}>
-                  <div style={{ padding: "0.4rem 0.75rem", fontWeight: 600, color: "var(--muted-foreground)", fontSize: "0.78rem" }}>Seller type</div>
-                  <div style={{ padding: "0.4rem 0.75rem", fontWeight: 600, color: "var(--muted-foreground)", fontSize: "0.78rem", borderLeft: "0.5px solid var(--border)" }}>Fee</div>
-                </div>
-                {[
-                  { value: "standard",  label: "Standard",  fee: "3.19% + $0.49" },
-                  { value: "preferred", label: "Preferred", fee: "2.99% + $0.49" },
-                ].map((opt, i) => (
-                  <label
-                    key={opt.value}
-                    htmlFor={`edit-seller-${opt.value}`}
-                    style={{
-                      display: "grid", gridTemplateColumns: "1fr 1fr",
-                      cursor: "pointer",
-                      background: sellerType === opt.value ? "var(--muted)" : "transparent",
-                      borderBottom: i === 0 ? "0.5px solid var(--border)" : "none",
-                    }}
-                  >
-                    <div style={{ padding: "0.55rem 0.75rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", fontWeight: sellerType === opt.value ? 600 : 400, color: sellerType === opt.value ? "var(--primary)" : "var(--foreground)" }}>
-                      <input
-                        type="radio" id={`edit-seller-${opt.value}`}
-                        name="editSellerType" value={opt.value}
-                        checked={sellerType === opt.value}
-                        onChange={() => setSellerType(opt.value)}
-                        style={{ accentColor: "var(--primary)" }}
-                      />
-                      {opt.label}
-                    </div>
-                    <div style={{ padding: "0.55rem 0.75rem", fontSize: "0.78rem", color: "var(--muted-foreground)", borderLeft: "0.5px solid var(--border)", display: "flex", alignItems: "center" }}>
-                      {opt.fee}
-                    </div>
-                  </label>
-                ))}
-              </div>
+              <p>A flat platform fee of {PLATFORM_FEE}% per transaction</p>
 
               {/* Live fee breakdown */}
               {price && Number(price) > 0 && (
@@ -331,7 +299,6 @@ function EditListing() {
                     { label: "Item price", value: `$${Number(price).toLocaleString()}` },
                     { label: "Est. shipping", value: fees.shipping === 0 ? "Free" : `$${fees.shipping.toFixed(2)}` },
                     { label: `Transaction fee (${(fees.transactionRate * 100).toFixed(2)}% + $0.49)`, value: `-$${fees.transactionFee.toFixed(2)}`, red: true },
-                    { label: "Selling fee (3%)", value: `-$${fees.sellingFee.toFixed(2)}`, red: true },
                   ].map((row) => (
                     <div key={row.label} style={{ display: "flex", justifyContent: "space-between", color: row.red ? "var(--destructive)" : "var(--muted-foreground)", marginBottom: "0.2rem" }}>
                       <span style={{ color: "var(--muted-foreground)" }}>{row.label}</span>
