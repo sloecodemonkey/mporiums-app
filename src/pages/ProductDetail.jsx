@@ -16,6 +16,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [notify, setNotify] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -115,6 +116,10 @@ function ProductDetail() {
     e.preventDefault();
     alert("Offer sent! (Requires backend integration)");
     closeOfferModal();
+  }
+
+  function handleMessageSeller(e) {
+    alert("Messaging feature coming soon!");
   }
 
   // ----------------------------------------------------------
@@ -222,18 +227,18 @@ function ProductDetail() {
               <div className="seller-info">
 
                 {/* Seller avatar initials */}
-                <div className="seller-avatar">{product.sellerAvatar}</div>
+                {/* <div className="seller-avatar">{product.sellerAvatar}</div> */}
 
                 <div className="seller-name">
                   {/* Seller name — plain text for now.
                       You can make this a Link to /seller/:id when you build that page */}
                     <Link to={`/seller/${product.seller}`} style={{ color: "var(--primary)", fontWeight: 600 }} onClick={handleScrollToTop}>
-                      {product.seller}
+                      {product.username}
                     </Link>
 
                   {/* Verified badge — only show if verified
                       */}
-                  {product.verified && (
+                  {product.stripe_onboarding_complete && (
                     <img
                       src="/icons/shield.svg"
                       alt="Verified seller"
@@ -244,37 +249,85 @@ function ProductDetail() {
 
                 {/* City, State
                    */}
-                <div className="seller-location">
+                {/* <div className="seller-location">
                   {product.sellerCity && product.sellerState
                     ? `${product.sellerCity}, ${product.sellerState}`
                     : product.sellerCity || product.sellerState || ""}
-                </div>
+                </div> */}
               </div>
             </div>
 
             {/* ── ACTION BUTTONS ── */}
             <div className="product-actions">
+              {/* DONT ALLOW ADD TO CART IF SELLER HASN'T COMPLETED STRIPE ONBOARDING */}
+              {!product.stripe_onboarding_complete && (
+                <div className="alert alert-warning" role="alert">
+                  <p>This seller hasn't completed their payment setup yet.</p>
+                  <p>Contact the seller to express your interest and encourage them to complete their setup.</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem" }}>
+                    <button className="btn btn-primary btn-sm" onClick={handleMessageSeller}>
+                      Contact Seller
+                    </button>
+                    <button
+                      onClick={() => setNotify(n => !n)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      <span style={{
+                        display: "inline-block",
+                        width: "2.5rem",
+                        height: "1.4rem",
+                        borderRadius: "999px",
+                        background: notify ? "#0d6efd" : "#ccc",
+                        position: "relative",
+                        transition: "background 0.2s",
+                        flexShrink: 0,
+                      }}>
+                        <span style={{
+                          position: "absolute",
+                          top: "0.15rem",
+                          left: notify ? "1.2rem" : "0.15rem",
+                          width: "1.1rem",
+                          height: "1.1rem",
+                          borderRadius: "50%",
+                          background: "#fff",
+                          transition: "left 0.2s",
+                        }} />
+                      </span>
+                      Notify me when item is available
+                    </button>
+                  </div>
+                </div>
+              )}
+              {product.stripe_onboarding_complete && (
+                <>
+                  {/* ADD TO CART */}
+                  <button className="btn btn-primary btn-sm btn-flex"
+                    onClick={handleAddToCart}
+                  >
+                    <img src="/icons/shopping-cart-white.svg" alt="Cart" style={{ width: "2rem", height: "2rem" }} />
+                    {/* Show "Added!" briefly after clicking, then revert */}
+                    {addedToCart ? "Added!" : "Add to Cart"}
+                  </button>
 
-              {/* ADD TO CART
-                   */}
-              <button
-                className="btn btn-primary btn-sm btn-flex"
-                onClick={handleAddToCart}
-              >
-                <img src="/icons/shopping-cart-white.svg" alt="Cart" style={{ width: "2rem", height: "2rem" }} />
-                {/* Show "Added!" briefly after clicking, then revert */}
-                {addedToCart ? "Added!" : "Add to Cart"}
-              </button>
-
-              {/* MAKE OFFER
-                  */}
-              <button
-                className="btn btn-outline btn-sm btn-blue-hover btn-flex"
-                onClick={openOfferModal}
-              >
-                <img src="/icons/message-square.svg" alt="Message" style={{ width: "2rem", height: "2rem" }} />
-                Make Offer
-              </button>
+                  {/* MAKE OFFER */}
+                  <button
+                    className="btn btn-outline btn-sm btn-blue-hover btn-flex"
+                    onClick={openOfferModal}
+                  >
+                    <img src="/icons/message-square.svg" alt="Message" style={{ width: "2rem", height: "2rem" }} />
+                    Make Offer
+                  </button>
+                </>
+              )}
 
               <button className="btn btn-outline btn-sm btn-blue-hover btn-flex">
                 <img src="/icons/heart.svg" alt="Save" style={{ width: "2rem", height: "2rem" }} />
