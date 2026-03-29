@@ -72,7 +72,7 @@ export function normalizeListing(listing) {
     category: categoryName,
     seller,
     sellerAvatar,
-    verified: false,
+    verified: listing.stripe_onboarding_complete || false,
     rating: 0,
   };
 }
