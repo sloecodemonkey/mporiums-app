@@ -118,8 +118,21 @@ function ProductDetail() {
     closeOfferModal();
   }
 
+  // ----------------------------------------------------------
+  // CONTACT SELLER (for when Stripe onboarding isn't complete)
+  // ----------------------------------------------------------
+
   function handleMessageSeller(e) {
     alert("Messaging feature coming soon!");
+  }
+
+  // ----------------------------------------------------------
+  // NOTIFY ME TO CONTACT SELLER (for when Stripe onboarding isn't complete)
+  // ----------------------------------------------------------
+  
+  function handleNotifyMe(e) {
+    setNotify(!notify);
+    alert("We'll notify you when this item becomes available!");
   }
 
   // ----------------------------------------------------------
@@ -269,7 +282,7 @@ function ProductDetail() {
                       Contact Seller
                     </button>
                     <button
-                      onClick={() => setNotify(n => !n)}
+                      onClick={handleNotifyMe}
                       style={{
                         display: "flex",
                         alignItems: "center",
