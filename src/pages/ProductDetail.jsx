@@ -277,7 +277,7 @@ function ProductDetail() {
                 <div className="alert alert-warning" role="alert">
                   <p>The seller has not completed their payment setup yet.</p>
                   <p>Contact the seller to express your interest and encourage them to complete their setup.</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem", marginBottom: "0.75rem", justifyContent: "space-around" }}>
                     <button className="btn btn-primary btn-sm" onClick={handleMessageSeller}>
                       Contact Seller
                     </button>
@@ -315,7 +315,7 @@ function ProductDetail() {
                           transition: "left 0.2s",
                         }} />
                       </span>
-                      Notify me when item is available
+                      <span style={{ color: "inherit" }}>Notify me when item is available</span>
                     </button>
                   </div>
                 </div>
