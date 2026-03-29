@@ -30,7 +30,8 @@ import Deals          from "./pages/Deals";
 import PriceGuide     from "./pages/PriceGuide";
 import OrderHistory   from "./pages/OrderHistory";
 import EditListing    from "./pages/EditListing";
-import SellerDashboard from "./pages/SellerDashboard";
+import SellerDashboard   from "./pages/SellerDashboard";
+import SellerOnboarding  from "./pages/SellerOnboarding";
 import { PaymentSuccess } from "./pages/ExtraPages";
 import { NotFound }       from "./pages/ExtraPages";
 
@@ -75,6 +76,7 @@ function App() {
                 <Route path="/orders"                   element={<OrderHistory />}    />
                 <Route path="/dashboard"                element={<SellerDashboard />} />
                 <Route path="/success"                  element={<PaymentSuccess />}  />
+                <Route path="/seller-onboarding"        element={<SellerOnboarding />}          />
                 {/* Catches any URL that doesn't match — shows 404 page */}
                 <Route path="*"                         element={<NotFound />}        />
               </Routes>
