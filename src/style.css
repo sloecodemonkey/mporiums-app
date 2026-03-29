@@ -186,6 +186,31 @@ img { max-width: 100%; height: auto; display: block; }
 .icon-btn { padding: 0.5rem; border-radius: 0.5rem; position: relative; min-width: 44px; min-height: 44px; }
 
 /* =============================================
+   ALERTS
+   ============================================= */
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.alert p { margin: 0 0 0.25rem; }
+.alert p:last-of-type { margin-bottom: 0; }
+
+.alert-warning {
+  background-color: hsl(45, 100%, 94%);
+  border-color: hsl(45, 90%, 75%);
+  color: hsl(35, 80%, 25%);
+}
+.dark .alert-warning,
+[data-theme="dark"] .alert-warning {
+  background-color: hsl(45, 60%, 15%);
+  border-color: hsl(45, 70%, 35%);
+  color: hsl(45, 90%, 75%);
+}
+
+/* =============================================
    BADGES
    ============================================= */
 .badge {
