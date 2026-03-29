@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useUser } from '@/contexts';
 import { apiUrl } from '@/lib/api';
 
@@ -67,7 +67,7 @@ export default function StripeOnboardingBanner({ className = '', forceShow = fal
           </p>
         </div>
         <Link
-          href="/seller-onboarding"
+          to="/seller-onboarding"
           className="flex-shrink-0 px-4 py-2 bg-gray-900 text-white rounded-lg font-semibold text-sm hover:bg-gray-800 transition-colors"
         >
           Complete Setup
