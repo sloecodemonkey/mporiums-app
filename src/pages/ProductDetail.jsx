@@ -16,7 +16,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [notify, setNotify] = useState(false);
+  const [notify, setNotify] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -127,12 +127,17 @@ function ProductDetail() {
   }
 
   // ----------------------------------------------------------
-  // NOTIFY ME TO CONTACT SELLER (for when Stripe onboarding isn't complete)
+  // NOTIFY ME TOGGLE (for when Stripe onboarding isn't complete)
   // ----------------------------------------------------------
   
   function handleNotifyMe(e) {
     setNotify(!notify);
-    alert("We'll notify you when this item becomes available!");
+    //TODO: Integrate with backend to save user's preference for notifications on this product;
+    //TODO: When item becomes available, send notification to users who opted in. 
+    // This would require backend support to track interested users and trigger 
+    // notifications when the seller completes stripe onboarding.
+    //TODO: show confirmation message when user toggles this setting, 
+    // and also show current setting (e.g. "You will receive a notification when this item becomes available" vs "You will NOT receive a notification when this item becomes available")
   }
 
   // ----------------------------------------------------------
@@ -277,7 +282,7 @@ function ProductDetail() {
                 <div className="alert alert-warning" role="alert">
                   <p>The seller has not completed their payment setup yet.</p>
                   <p>Contact the seller to express your interest and encourage them to complete their setup.</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem", marginBottom: "0.75rem", justifyContent: "space-around" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.75rem", justifyContent: "space-around" }}>
                     <button className="btn btn-primary btn-sm" onClick={handleMessageSeller}>
                       Contact Seller
                     </button>
@@ -292,6 +297,7 @@ function ProductDetail() {
                         cursor: "pointer",
                         padding: 0,
                         fontSize: "0.9rem",
+                        color: "inherit",
                       }}
                     >
                       <span style={{

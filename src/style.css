@@ -194,6 +194,7 @@ img { max-width: 100%; height: auto; display: block; }
   border: 1px solid transparent;
   font-size: 0.9rem;
   line-height: 1.5;
+  width: 100%;
 }
 .alert p { margin: 0 0 0.25rem; }
 .alert p:last-of-type { margin-bottom: 0; }
